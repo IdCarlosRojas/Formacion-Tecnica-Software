@@ -1,4 +1,24 @@
-Flask
-Flask-SQLAlchemy
-Flask-Bcrypt
-Flask-Admin
+# =============================================
+#  ACTIVETRACK - Plataforma de Gimnasio Digital
+#  Requisitos de Python
+# =============================================
+
+# --- Framework Web ---
+Flask==3.0.3
+
+# --- Base de Datos ---
+Flask-SQLAlchemy==3.1.1
+SQLAlchemy==2.0.36
+
+# --- Seguridad (Encriptación de contraseñas con bcrypt) ---
+Flask-Bcrypt==1.0.1
+
+# --- Formularios ---
+WTForms==3.1.2
+Flask-WTF==1.2.1
+
+# --- Manejo de archivos subidos ---
+Werkzeug==3.0.4
+
+# --- Servidor de producción (opcional pero recomendado) pip install -r requirements_activetrack.txt  ---
+gunicorn==23.0.0
