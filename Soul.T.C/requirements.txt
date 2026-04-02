@@ -1,3 +1,17 @@
-Flask
-Flask-SQLAlchemy
-werkzeug
+# =============================================
+#  Soul.T.C - Plataforma de Estudio de Tatuajes
+#  Requisitos de Python
+# =============================================
+ 
+# --- Framework Web ---
+Flask==3.0.3
+ 
+# --- Base de Datos ---
+Flask-SQLAlchemy==3.1.1
+SQLAlchemy==2.0.36
+ 
+# --- Seguridad (Hashing de contraseñas) ---
+Werkzeug==3.0.4
+ 
+# --- Servidor de producción (opcional pero recomendado) ---
+gunicorn==23.0.0
