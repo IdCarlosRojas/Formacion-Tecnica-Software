@@ -1,0 +1,218 @@
+:root {
+  /* --- INICIO DE MODIFICACIÓN (Paleta de Colores) --- */
+  --bg: #fffbeb; /* Un crema-amarillo muy pálido */
+  --panel: #ffffff;
+  --accent: #FDE047; /* Amarillo principal (como el logo) */
+  --accent-dark: #F59E0B; /* Un dorado/ámbar para contraste */
+  /* --- FIN DE MODIFICACIÓN --- */
+
+  --muted: #6b6b6b;
+  --text: #111111;
+  --card-radius: 12px;
+  --shadow: 0 6px 18px rgba(17, 17, 17, 0.06);
+  --green: #28a745;
+  --red: #dc3545;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+    background-size: 2px 2px;
+    color: var(--text);
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.landing-header {
+    background: var(--panel);
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+    box-shadow: var(--shadow);
+}
+
+.landing-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.landing-header .logo-img {
+    display: none; /* Oculta el logo del header */
+}
+
+.landing-nav {
+    display: flex;
+    gap: 15px;
+}
+
+/* --- INICIO DE MODIFICACIÓN (Hero con Patrón y Colores Nuevos) --- */
+.hero {
+    padding: 100px 0;
+    text-align: center;
+    color: var(--panel);
+    
+    background-image: url('../static/images/spiral_pattern.jpg'); 
+    background-size: cover; 
+    background-position: center; 
+    
+    background-blend-mode: multiply; 
+    background-color: var(--accent); /* Color base (amarillo) */
+    
+    /* Gradiente con los nuevos colores y opacidad de 95% */
+    background-image: 
+        linear-gradient(rgba(253, 224, 71, 0.95) 0%, rgba(245, 158, 11, 0.95) 100%), 
+        url('../static/images/spiral_pattern.jpg'); 
+    
+    background-size: 100% 100%, cover; 
+    background-position: center;
+}
+/* --- FIN DE MODIFICACIÓN --- */
+
+.hero-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.hero-logo {
+  width: 150px; 
+  height: auto;
+  margin-bottom: 30px; 
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.15));
+}
+
+.hero h1 {
+    font-size: 3.2em;
+    font-weight: 700;
+    color: var(--panel); 
+    margin-bottom: 15px;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+}
+
+.hero p {
+    font-size: 1.1em;
+    color: #fff6ea; 
+    margin-bottom: 30px;
+    line-height: 1.6;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.btn.btn-hero {
+    padding: 14px 30px;
+    font-size: 1.1em;
+}
+
+.hero .btn.primary {
+    background: var(--panel); 
+    color: var(--accent-dark); 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.hero .btn.primary:hover {
+    background: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+
+.features {
+    padding: 80px 0;
+    text-align: center;
+}
+
+.features h2 {
+    font-size: 2.8em; 
+    margin-bottom: 50px;
+    /* Gradiente actualizado a amarillo/dorado */
+    background: linear-gradient(to right, var(--accent-dark), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    text-align: left;
+}
+
+.feature-card {
+    background: var(--panel);
+    border-radius: var(--card-radius);
+    padding: 30px;
+    box-shadow: var(--shadow), inset 0 1px 3px rgba(0,0,0,0.02);
+    /* Borde de gradiente actualizado */
+    border-top: 4px solid;
+    border-image: linear-gradient(to right, var(--accent-dark), var(--accent)) 1;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 22px rgba(17, 17, 17, 0.08), inset 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.feature-card h3 {
+    font-size: 1.4em;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.feature-card p {
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.cta {
+    padding: 60px 0;
+    text-align: center;
+    color: var(--text);
+    
+    /* Gradiente de CTA actualizado */
+    background-image: 
+      radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    
+    background-size: 2px 2px, 100% 100%;
+    background-color: var(--accent);
+}
+
+.cta h2 {
+    font-size: 2.2em;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.cta p {
+    font-size: 1.1em;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.cta .btn.primary {
+    background: var(--panel);
+    color: var(--accent-dark);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.cta .btn.primary:hover {
+    background: #fff;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.landing-footer {
+    text-align: center;
+    padding: 40px 0; 
+    color: var(--muted);
+    font-size: 0.9em;
+    background: var(--panel); 
+    border-top: 1px solid #f0f0f0; 
+    margin-top: 60px; 
+}

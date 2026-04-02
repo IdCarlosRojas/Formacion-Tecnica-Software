@@ -1,0 +1,45 @@
+{% extends "admin_base_custom.html" %}
+
+{% block title %}Gestionar Mis Clases{% endblock %}
+
+{% block content %}
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Gestionar Mis Clases</h1>
+        <a href="{{ url_for('instructor_edit_clase', id=0) }}" class="btn-primary" style="text-decoration: none;">+ Crear Nueva Clase</a>
+    </div>
+    <p>Administra las clases que tienes asignadas.</p>
+    
+    <div class="admin-table-container">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Nombre Clase</th>
+                    <th>Fecha y Hora</th>
+                    <th>Reservas</th>
+                    <th>Cupo Máximo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for clase in clases %}
+                <tr>
+                    <td>{{ clase.NombreClase }}</td>
+                    <td>{{ clase.FechaHora.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td>{{ clase.reservas|length }}</td>
+                    <td>{{ clase.CupoMaximo }}</td>
+                    <td class="actions">
+                        <a href="{{ url_for('instructor_edit_clase', id=clase.ClaseId) }}" class="btn-edit">Editar</a>
+                        <form action="{{ url_for('instructor_delete_clase', id=clase.ClaseId) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta clase?');">
+                            <button type="submit" class="btn-delete">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: #888;">No tienes clases programadas.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

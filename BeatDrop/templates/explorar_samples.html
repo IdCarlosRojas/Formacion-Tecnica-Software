@@ -1,0 +1,41 @@
+{% extends 'base_layout.html' %}
+{% block title %}Explorar Samples | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+<section class="explorar-samples-section">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h2>Explorar Samples</h2>
+    <a href="{{ url_for('subir_sample') }}" class="btn primary">Subir Sample</a>
+  </div>
+  <p class="section-desc">Encuentra loops y samples con licencias de regalías para tus producciones.</p>
+  
+  <div class="samples-grid">
+    {% for sample in samples %}
+    <article class="sample-card">
+      <div class="sample-info">
+        <h3><a href="{{ url_for('sample_detail', sample_id=sample.SampleId) }}">{{ sample.Nombre }}</a></h3>
+        <p class="meta">
+          Por: <a href="{{ url_for('search', q='@' + sample.artista_ref.NombreUsuario) }}">{{ sample.artista_ref.NombreUsuario }}</a>
+        </p>
+        <audio controls controlsList="nodownload" style="width: 100%; height: 40px; margin-top: 10px;">
+          <source src="{{ url_for('static', filename='uploads/audio/' + sample.audio_preview_url) }}" type="audio/mpeg">
+        </audio>
+        
+        <div class="card-actions">
+          {% set licencia = sample.licencias.first() %}
+          {% if licencia.Tipo == 'Gratuita' %}
+            <span class="sample-tag gratuita">Uso Gratuito</span>
+          {% else %}
+            <span class="sample-tag regalias">{{ licencia.porcentaje_regalias }}% Regalías</span>
+          {% endif %}
+          <a href="{{ url_for('sample_detail', sample_id=sample.SampleId) }}" class="btn secondary" style="padding: 5px 10px;">Ver</a>
+        </div>
+      </div>
+    </article>
+    {% else %}
+    <p>No hay samples disponibles en este momento.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

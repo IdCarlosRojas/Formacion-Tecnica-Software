@@ -1,0 +1,9 @@
+
+admin,Administrador,admin@beatdrop.com,admin123
+julianmoreno,Productor,julian@beatdrop.com,12345
+nataliarojas,Productor,natalia@beatdrop.com,12345
+ajaramillo,Productor,alejandro@beatdrop.com,12345
+
+
+
+pip install -r requirements.txt

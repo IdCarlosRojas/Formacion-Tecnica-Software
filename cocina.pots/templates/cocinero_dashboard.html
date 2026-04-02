@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Panel Cocinero - DigitalFood{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h2>👨‍🍳 Panel del Cocinero</h2>
+    <p>Gestión de preparación de pedidos</p>
+</div>
+
+<div class="cocina-grid">
+    <!-- PEDIDOS PENDIENTES -->
+    <div class="pedidos-section">
+        <h3>🕐 Pedidos Pendientes</h3>
+        {% if pedidos_pendientes %}
+            <div class="pedidos-list">
+                {% for pedido in pedidos_pendientes %}
+                <div class="pedido-card pedido-pendiente">
+                    <div class="pedido-header">
+                        <h4>Mesa {{ pedido.mesa }}</h4>
+                        <span class="estado-badge estado-pendiente">Pendiente</span>
+                    </div>
+                    
+                    <div class="pedido-detalles">
+                        <h5>Productos:</h5>
+                        <ul>
+                            {% for detalle in pedido.detalles %}
+                            <li>{{ detalle.cantidad }}x {{ detalle.producto.nombre }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <div class="pedido-actions">
+                        <form action="{{ url_for('cambiar_estado_pedido', id=pedido.id) }}" method="POST" style="display: inline;">
+                            <input type="hidden" name="estado" value="en_preparacion">
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                🍳 Iniciar Preparación
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="no-pedidos">No hay pedidos pendientes</p>
+        {% endif %}
+    </div>
+
+    <!-- PEDIDOS EN PREPARACIÓN -->
+    <div class="pedidos-section">
+        <h3>🍳 Pedidos en Preparación</h3>
+        {% if pedidos_preparacion %}
+            <div class="pedidos-list">
+                {% for pedido in pedidos_preparacion %}
+                <div class="pedido-card pedido-preparacion">
+                    <div class="pedido-header">
+                        <h4>Mesa {{ pedido.mesa }}</h4>
+                        <span class="estado-badge estado-preparacion">En Preparación</span>
+                    </div>
+                    
+                    <div class="pedido-detalles">
+                        <h5>Productos:</h5>
+                        <ul>
+                            {% for detalle in pedido.detalles %}
+                            <li>{{ detalle.cantidad }}x {{ detalle.producto.nombre }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <div class="pedido-info">
+                        <p><strong>Total:</strong> ${{ "%.0f"|format(pedido.total) }}</p>
+                    </div>
+                    
+                    <div class="pedido-actions">
+                        <form action="{{ url_for('cambiar_estado_pedido', id=pedido.id) }}" method="POST" style="display: inline;">
+                            <input type="hidden" name="estado" value="listo">
+                            <button type="submit" class="btn btn-success btn-sm">
+                                ✅ Marcar como Listo
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="no-pedidos">No hay pedidos en preparación</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

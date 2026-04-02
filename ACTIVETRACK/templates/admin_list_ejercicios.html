@@ -1,0 +1,43 @@
+{% extends "admin_base_custom.html" %}
+
+{% block title %}Gestionar Ejercicios{% endblock %}
+
+{% block content %}
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Gestionar Ejercicios</h1>
+        <a href="{{ url_for('admin_edit_ejercicio', id=0) }}" class="btn-primary" style="text-decoration: none;">+ Crear Nuevo Ejercicio</a>
+    </div>
+    <p>Crea, edita o elimina los ejercicios disponibles en la plataforma.</p>
+    
+    <div class="admin-table-container">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Grupo Muscular</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ej in ejercicios %}
+                <tr>
+                    <td>{{ ej.EjercicioId }}</td>
+                    <td>{{ ej.Nombre }}</td>
+                    <td>{{ ej.GrupoMuscular }}</td>
+                    <td class="actions">
+                        <a href="{{ url_for('admin_edit_ejercicio', id=ej.EjercicioId) }}" class="btn-edit">Editar</a>
+                        <form action="{{ url_for('admin_delete_ejercicio', id=ej.EjercicioId) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este ejercicio?');">
+                            <button type="submit" class="btn-delete">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" style="text-align: center; color: #888;">No hay ejercicios en la base de datos.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

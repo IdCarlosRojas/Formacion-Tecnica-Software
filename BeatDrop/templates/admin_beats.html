@@ -1,0 +1,111 @@
+{% extends 'base_layout.html' %}
+{% block title %}Gestionar Beats | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('admin_dashboard') }}">&larr; Volver al Panel</a>
+<div style="display: flex; justify-content: space-between; align-items: center;">
+  <h2>Gestionar Beats</h2>
+  <a href="{{ url_for('admin_new_beat') }}" class="btn primary">Subir Beat (Admin)</a>
+</div>
+<p class="section-desc">Total: {{ beats|length }} beats subidos.</p>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Portada</th>
+      <th>Nombre</th>
+      <th>Artista</th>
+      <th>Monetizado</th>
+      <th>Exclusiva</th>
+      <th>Token</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for beat in beats %}
+    <tr>
+      <td>{{ beat.BeatId }}</td>
+      <td>
+        <img src="{% if beat.cover_url.startswith('http') %}{{ beat.cover_url }}{% else %}{{ url_for('static', filename='uploads/covers/' + beat.cover_url) }}{% endif %}" alt="Cover" class="admin-beat-cover">
+      </td>
+      <td>{{ beat.Nombre }}</td>
+      <td>@{{ beat.artista_ref.NombreUsuario }}</td>
+      <td>
+        {% if beat.monetizado %}
+          <span style="color: var(--green); font-weight: 600;">Sí</span>
+        {% else %}
+          <span style="color: var(--muted);">No</span>
+        {% endif %}
+      </td>
+      <td>
+        {% if beat.patente_disponible %}
+          <span style="color: var(--green); font-weight: 600;">Sí</span>
+        {% else %}
+          <span style="color: var(--muted);">No</span>
+        {% endif %}
+      </td>
+      <td>
+        <small style="font-size: 11px; color: var(--muted);" title="{{ beat.copyright_token }}">{{ beat.copyright_token[:8] }}...</small>
+      </td>
+      <td class="admin-actions">
+        <a href="{{ url_for('admin_edit_beat', beat_id=beat.BeatId) }}" class="btn-edit-admin">Editar</a>
+        <form action="{{ url_for('admin_delete_beat', beat_id=beat.BeatId) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de que quieres ELIMINAR este beat? Esta acción borrará sus archivos y licencias.');">
+          <button type="submit" class="btn-danger-admin">
+            Eliminar
+          </button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<style>
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  .admin-table th, .admin-table td {
+    padding: 12px;
+    border: 1px solid #eee;
+    text-align: left;
+    vertical-align: middle;
+  }
+  .admin-table th {
+    background: #f9f9f9;
+  }
+  .admin-beat-cover {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+  .admin-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .btn-edit-admin {
+    background: #cce5ff;
+    color: #004085;
+    border: 1px solid #b8daff;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .btn-danger-admin {
+    background: #f8d7da;
+    color: var(--red);
+    border: 1px solid var(--red);
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+</style>
+{% endblock %}

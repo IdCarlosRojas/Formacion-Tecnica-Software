@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Gestión de Usuarios - DigitalFood{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h2>👥 Gestión de Usuarios</h2>
+    <p>Administra el personal del restaurante</p>
+</div>
+
+<!-- ===== SECCIÓN ACTUALIZADA ===== -->
+<div class="actions-bar" style="display: flex; gap: 1rem; align-items: center;">
+    <!-- Botón "Agregar Usuario" AHORA FUNCIONA -->
+    <a href="{{ url_for('crear_usuario') }}" class="btn btn-primary">
+        ➕ Agregar Usuario
+    </a>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">
+        ↩️ Volver al Dashboard
+    </a>
+</div>
+
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Username</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.id }}</td>
+                <td><strong>{{ usuario.nombre }}</strong></td>
+                <td>{{ usuario.username }}</td>
+                <td>
+                    <!-- He añadido badges de color para los roles -->
+                    <span class="categoria-badge 
+                        {% if usuario.rol == 'admin' %}categoria-platos-fuertes{% endif %}
+                        {% if usuario.rol == 'mesero' %}categoria-bebidas{% endif %}
+                        {% if usuario.rol == 'cocinero' %}categoria-entradas{% endif %}">
+                        {{ usuario.rol|title }}
+                    </span>
+                </td>
+                
+                <!-- ===== SECCIÓN DE ACCIONES ACTUALIZADA ===== -->
+                <td class="actions" style="display: flex; gap: 5px;">
+                    <!-- Botón "Editar" AHORA FUNCIONA -->
+                    <a href="{{ url_for('editar_usuario', id=usuario.id) }}" class="btn btn-outline btn-sm">Editar</a>
+                    
+                    <!-- Botón "Eliminar" AHORA FUNCIONA (con seguridad) -->
+                    <!-- No se puede eliminar al admin (ID 1) -->
+                    {% if usuario.id != 1 %}
+                    <form action="{{ url_for('eliminar_usuario', id=usuario.id) }}" method="POST"
+                          onsubmit="return confirm('¿Estás seguro de que quieres eliminar a {{ usuario.nombre }}?');">
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

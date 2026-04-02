@@ -1,0 +1,53 @@
+{% extends "admin_base_custom.html" %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block content %}
+    <h1>Dashboard de Administrador</h1>
+    <p>Bienvenido al panel de gestión de ActiveTrack.</p>
+    
+    <section class="stats-grid">
+        <div class="stat-card">
+            <h3>Total Usuarios</h3>
+            <p class="stat-value">{{ stats.total_users }}</p>
+            <p class="stat-label">Usuarios registrados</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Membresías Activas</h3>
+            <p class="stat-value">{{ stats.active_memberships }}</p>
+            <p class="stat-label">Miembros con plan activo</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Ejercicios</h3>
+            <p class="stat-value">{{ stats.total_exercises }}</p>
+            <p class="stat-label">En la base de datos</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Clases Programadas</h3>
+            <p class="stat-value">{{ stats.total_classes }}</p>
+            <p class="stat-label">Clases en agenda</p>
+        </div>
+    </section>
+
+    <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+    
+    <section class="admin-form-container" style="max-width: 100%;">
+        <h2><i class="fas fa-broom"></i> Herramientas de Limpieza</h2>
+        <p>Funciones para mantener la base de datos ordenada.</p>
+        
+        <form action="{{ url_for('admin_cleanup_past_classes') }}" method="POST" 
+              onsubmit="return confirm('¿Estás seguro? Esto eliminará todas las clases que ya pasaron Y QUE NO TIENEN RESERVAS. Esta acción no se puede deshacer.');">
+            
+            <label>Limpiar clases pasadas</label>
+            <p style="color: #555; font-size: 0.9em; margin-bottom: 15px;">
+                Esto eliminará permanentemente todas las clases cuya fecha ya pasó.<br>
+                <strong>Nota:</strong> No se eliminarán clases que tengan reservas de usuarios para mantener el historial.
+            </p>
+            <button type="submit" class="btn-primary" style="background-color: #dc3545;">Eliminar Clases Pasadas</button>
+        </form>
+    </section>
+
+{% endblock %}

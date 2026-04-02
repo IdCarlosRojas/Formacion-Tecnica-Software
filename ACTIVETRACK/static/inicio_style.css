@@ -1,0 +1,301 @@
+/* ======================================================== */
+/* --- ESTILOS PARA LA NUEVA PÁGINA DE INICIO (Inicio.html) --- */
+/* ======================================================== */
+
+/* Aseguramos que la fuente principal sea la misma */
+body {
+    font-family: "Roboto", sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+.txtRojo {
+    color: #ffa500; /* Usamos el naranja de tu app */
+}
+
+/* --- Header --- */
+.contenedor-header-inicio {
+    background: #fff;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-bottom: 2px solid #ffa500;
+}
+
+.contenedor-header-inicio header {
+    max-width: 1100px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+}
+
+.contenedor-header-inicio header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffa500;
+    text-transform: uppercase;
+}
+
+.contenedor-header-inicio header nav a {
+    text-decoration: none;
+    color: #333;
+    margin-left: 20px;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.contenedor-header-inicio header nav a:hover {
+    color: #ffa500;
+}
+
+/* --- Sección Inicio (Hero) --- */
+.inicio-landing {
+    /* --- IMAGEN MODIFICADA --- */
+    /* La URL ahora apunta a tu carpeta static/img. */
+    /* Cambia 'tu-imagen-de-fondo.jpg' por el nombre de tu archivo (ej: 'fondo-gym.jpg') */
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('img/fondo.png');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    padding-top: 60px; /* Para compensar el header */
+}
+
+.inicio-landing .contenido-seccion {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+.inicio-landing .info h2 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem); /* Tamaño adaptable */
+    font-weight: 900;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+
+.inicio-landing .info p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+.inicio-landing .btn-mas {
+    color: #fff;
+    font-size: 3rem;
+    text-decoration: none;
+    transition: transform 0.3s;
+}
+
+.inicio-landing .btn-mas:hover {
+    transform: scale(1.1);
+}
+
+.inicio-landing .opciones {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 50px;
+}
+
+.inicio-landing .opcion {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #ffa500;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: 500;
+    backdrop-filter: blur(5px);
+}
+
+/* --- Estilos Generales de Sección --- */
+section {
+    padding: 80px 20px;
+}
+
+.fila {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.col {
+    flex: 1;
+    min-width: 300px;
+}
+
+.col img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.contenedor-titulo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.contenedor-titulo .numero {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #ffa500;
+    margin-right: 15px;
+}
+
+.contenedor-titulo .info .frase {
+    color: #777;
+    font-weight: 500;
+}
+
+.contenedor-titulo .info h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
+}
+
+p.p-especial {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* --- Sección Explicación (Nueva) --- */
+.explicacion-at {
+    background: #fff;
+}
+
+.btn-pase {
+    display: inline-block;
+    background-color: #ffa500;
+    color: white;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 700;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+    border: none;
+    cursor: pointer;
+}
+.btn-pase:hover {
+    background-color: #ff8c00;
+}
+
+/* --- Sección Nosotros --- */
+.nosotros {
+    background: #fdfdfd;
+}
+
+.nosotros hr {
+    border: 0;
+    height: 1px;
+    background: #eee;
+    margin: 40px 0;
+}
+
+.fila-nosotros {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.fila-nosotros .frase {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/* --- Sección Servicios --- */
+.servicios {
+    background: #fff;
+}
+
+.servicios .contenido-servicios {
+    margin-bottom: 40px;
+}
+
+.info-servicios table {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+.info-servicios td {
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #eee;
+    width: 33.33%;
+}
+
+.info-servicios i {
+    font-size: 2.5rem;
+    color: #ffa500;
+    margin-bottom: 15px;
+}
+
+.info-servicios h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .contenedor-header-inicio header {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .contenedor-header-inicio header nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+     .contenedor-header-inicio header nav a {
+        margin: 5px 10px;
+    }
+
+    section {
+        padding: 40px 15px;
+    }
+
+    .fila {
+        flex-direction: column;
+    }
+
+    /* Invertir el orden en móvil para 'Nosotros' */
+    .nosotros .fila {
+        flex-direction: column-reverse;
+    }
+
+    .fila-nosotros {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .info-servicios td {
+        display: block;
+        width: 100%;
+        border-bottom: none;
+    }
+    .info-servicios tr:last-child td:last-child {
+        border-bottom: 1px solid #eee;
+    }
+}
+

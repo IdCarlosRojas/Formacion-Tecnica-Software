@@ -1,0 +1,48 @@
+{% extends "Base.html" %}
+{% block title %}Gestionar Usuarios{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('admin_dashboard') }}" style="color: var(--color-text-muted); margin-bottom: 1rem; display: inline-block;">⟵ Volver al Panel de Admin</a>
+<h2>Gestión de Usuarios ({{ usuarios | length }})</h2>
+
+<div class="card" style="grid-column: 1 / -1; padding: 2.5rem;">
+  <div style="overflow-x: auto;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Rol Actual</th>
+          <th>Cambiar Rol</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for usuario in usuarios %}
+        <tr>
+          <td>{{ usuario.id }}</td>
+          <td>{{ usuario.nombre }}</td>
+          <td>{{ usuario.email }}</td>
+          <td>
+            <span class_="{{ usuario.tipoUsuario | lower }}">{{ usuario.tipoUsuario }}</span>
+          </td>
+          <td>
+            <form action="{{ url_for('cambiar_rol_usuario') }}" method="POST">
+              <input type="hidden" name="usuario_id" value="{{ usuario.id }}">
+              <div style="display: flex; gap: 10px;">
+                <select name="tipoUsuario" class="form-group" style="margin: 0; padding: 0.5rem; background: var(--color-surface); border-color: var(--color-gold-muted);">
+                  <option value="cliente" {% if usuario.tipoUsuario == 'cliente' %}selected{% endif %}>Cliente</option>
+                  <option value="tatuador" {% if usuario.tipoUsuario == 'tatuador' %}selected{% endif %}>Tatuador</option>
+                  <option value="admin" {% if usuario.tipoUsuario == 'admin' %}selected{% endif %}>Admin</option>
+                </select>
+                <button type="submit" class="btn btn-small btn-primary">Guardar</button>
+              </div>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

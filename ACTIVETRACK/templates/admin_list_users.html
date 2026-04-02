@@ -1,0 +1,41 @@
+{% extends "admin_base_custom.html" %}
+
+{% block title %}Gestionar Usuarios{% endblock %}
+
+{% block content %}
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Gestionar Usuarios</h1>
+        <a href="{{ url_for('admin_edit_user', id=0) }}" class="btn-primary" style="text-decoration: none;">+ Crear Nuevo Usuario</a>
+    </div>
+    <p>Edita, elimina o crea nuevos usuarios.</p>
+    
+    <div class="admin-table-container">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Tipo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.UsuarioId }}</td>
+                    <td>{{ user.Nombre }}</td>
+                    <td>{{ user.Correo }}</td>
+                    <td><span style="font-weight: 600; color: #ffa500;">{{ user.TipoUsuario | upper }}</span></td>
+                    <td class="actions">
+                        <a href="{{ url_for('admin_edit_user', id=user.UsuarioId) }}" class="btn-edit">Editar</a>
+                        <form action="{{ url_for('admin_delete_user', id=user.UsuarioId) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que quieres eliminar a este usuario? Esta acción es irreversible.');">
+                            <button type="submit" class="btn-delete">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends 'base_layout.html' %}
+{% block title %}Gestionar Usuarios | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('admin_dashboard') }}">&larr; Volver al Panel</a>
+<div style="display: flex; justify-content: space-between; align-items: center;">
+  <h2>Gestionar Usuarios</h2>
+  <a href="{{ url_for('admin_new_user') }}" class="btn primary">Crear Nuevo Usuario</a>
+</div>
+<p class="section-desc">Total: {{ users|length }} usuarios registrados.</p>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Usuario</th>
+      <th>Email</th>
+      <th>Rol</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+    <tr>
+      <td>{{ user.UsuarioId }}</td>
+      <td>{{ user.NombreUsuario }}</td>
+      <td>{{ user.Email }}</td>
+      <td>
+        <span class="role-badge {{ user.Rol }}">{{ user.Rol }}</span>
+      </td>
+      <td class="admin-actions">
+        <a href="{{ url_for('admin_edit_user', user_id=user.UsuarioId) }}" class="btn-edit-admin">Editar</a>
+        
+        <form action="{{ url_for('admin_delete_user', user_id=user.UsuarioId) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar a {{ user.NombreUsuario }}?');">
+          <button type="submit" class="btn-danger-admin" {% if user.Rol == 'admin' %}disabled{% endif %}>
+            Eliminar
+          </button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<style>
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  .admin-table th, .admin-table td {
+    padding: 12px;
+    border: 1px solid #eee;
+    text-align: left;
+  }
+  .admin-table th {
+    background: #f9f9f9;
+  }
+  .admin-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .role-badge {
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .role-badge.admin {
+    background: var(--accent);
+    color: #333;
+  }
+  .role-badge.productor {
+    background: #eee;
+    color: #555;
+  }
+  .btn-edit-admin {
+    background: #cce5ff;
+    color: #004085;
+    border: 1px solid #b8daff;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .btn-danger-admin {
+    background: #f8d7da;
+    color: var(--red);
+    border: 1px solid var(--red);
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .btn-danger-admin:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+</style>
+{% endblock %}

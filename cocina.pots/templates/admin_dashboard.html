@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Panel Administrador - DigitalFood{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h2>👨‍💼 Panel de Administración</h2>
+    <p>Gestión completa del restaurante POTS</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <div class="stat-info">
+            <h3>{{ total_pedidos }}</h3>
+            <p>Total Pedidos</p>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">⏳</div>
+        <div class="stat-info">
+            <h3>{{ pedidos_pendientes }}</h3>
+            <p>Pedidos Pendientes</p>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">🍽️</div>
+        <div class="stat-info">
+            <h3>{{ total_productos }}</h3>
+            <p>Productos en Menú</p>
+        </div>
+    </div>
+</div>
+
+<div class="actions-grid">
+    <!-- ===== ¡NUEVA TARJETA AÑADIDA! ===== -->
+    <div class="action-card">
+        <h3>📋 Gestión de Pedidos</h3>
+        <p>Ver y administrar todos los pedidos</p>
+        <a href="{{ url_for('listar_pedidos') }}" class="btn btn-primary">Gestionar Pedidos</a>
+    </div>
+
+    <div class="action-card">
+        <h3>📦 Gestión de Productos</h3>
+        <p>Administra el menú del restaurante</p>
+        <a href="{{ url_for('listar_productos') }}" class="btn btn-primary">Gestionar Productos</a>
+    </div>
+    
+    <div class="action-card">
+        <h3>👥 Gestión de Usuarios</h3>
+        <p>Administra meseros y cocineros</p>
+        <a href="{{ url_for('listar_usuarios') }}" class="btn btn-primary">Gestionar Usuarios</a>
+    </div>
+    
+    <div class="action-card">
+        <h3>📈 Reportes</h3>
+        <p>Ver reportes de ventas y estadísticas</p>
+        <a href="{{ url_for('ver_reportes') }}" class="btn btn-primary">Ver Reportes</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeatDrop - Protege y Monetiza tu Música</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='landing_styles.css') }}">
+</head>
+<body>
+    <header class="landing-header">
+        <div class="container">
+            <div></div> <nav class="landing-nav">
+                <a href="{{ url_for('login') }}" class="btn secondary">Iniciar Sesión</a>
+                <a href="{{ url_for('registro') }}" class="btn primary">Registrarse</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <img src="{{ url_for('static', filename='logo-beatdrop.png') }}" alt="Logo BeatDrop" class="hero-logo">
+                <h1>Protege, Colabora y Monetiza tus Beats</h1>
+                <p>BeatDrop es la plataforma para productores y beatmakers de Bogotá. Sube tus creaciones, gestiona tus derechos de autor (Ley 1915 de 2018) y conéctate con artistas.</p>
+                <a href="{{ url_for('registro') }}" class="btn primary btn-hero">Comienza a Proteger tu Música</a>
+            </div>
+        </section>
+
+        <section class="features container">
+            <h2>Un Ecosistema para Creadores</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Gestión de Copyright</h3>
+                    <p>Sube tus beats a un entorno seguro. Genera y administra licencias y contratos para cada una de tus obras.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Monetización Justa</h3>
+                    <p>Define tus precios, vende tus licencias y recibe un reparto de beneficios equitativo por tu trabajo creativo.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Colaboración</h3>
+                    <p>Conéctate con otros artistas y vocalistas, facilita colaboraciones y lleva tus proyectos al siguiente nivel.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta">
+            <div class="container">
+                <h2>Tu talento tiene valor. Es hora de protegerlo.</h2>
+                <p>Únete a la comunidad de beatmakers que están cambiando la industria musical en Colombia.</p>
+                <a href="{{ url_for('registro') }}" class="btn primary btn-hero">Crear Cuenta Gratis</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="landing-footer">
+        <p>&copy; 2025 BeatDrop. Un proyecto de Natalia Rojas, Daniel Jaramillo y Julián Moreno.</p>
+    </footer>
+</body>
+</html>

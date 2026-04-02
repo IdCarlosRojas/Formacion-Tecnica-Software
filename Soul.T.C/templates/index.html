@@ -1,0 +1,43 @@
+{% extends "Base.html" %}
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<div style="text-align: center; margin: 3rem 0 4rem 0;">
+  <h1 style="font-size: 3.5rem; color: #fff;">Encuentra tu Próximo Tatuador</h1>
+  <p style="font-size: 1.2rem; color: var(--color-text-muted);">Explora, conecta y agenda con los mejores artistas de Bogotá.</p>
+</div>
+
+<div class="search-bar">
+  <form action="{{ url_for('buscar') }}" method="GET">
+    <div class="form-group">
+      <label for="q">¿Qué estilo buscas?</label>
+      <input type="text" id="q" name="q" placeholder="Ej: Realismo, Neotradicional...">
+    </div>
+    <div class="form-group">
+      <label for="loc">¿Dónde?</label>
+      <input type="text" id="loc" name="loc" placeholder="Ej: Chapinero, Bogotá...">
+    </div>
+    <button type="submit" class="btn btn-primary">Buscar</button>
+  </form>
+</div>
+
+<hr style="margin: 3rem 0; border-color: rgba(255,255,255,0.1);">
+
+<h2>Artistas Destacados</h2>
+{% if tatuadores %}
+  <div class="dashboard-grid">
+    {% for tatuador in tatuadores %}
+      <div class="card">
+        <h3>{{ tatuador.nombre }}</h3>
+        {% if tatuador.perfil and tatuador.perfil.especialidades %}
+          <p style="color: var(--color-text-muted);">{{ tatuador.perfil.especialidades }}</p>
+        {% endif %}
+        <a href="{{ url_for('perfil_tatuador', id=tatuador.id) }}" style="margin-top: auto;">Ver Portafolio &rarr;</a>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No hay tatuadores registrados en este momento.</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'base_layout.html' %}
+{% block title %}Subir Sample | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <h2>Sube tu nuevo Sample</h2>
+  <p class="section-desc">Ofrece tus samples a otros productores, gratis o a cambio de regalías.</p>
+  
+  <form action="{{ url_for('subir_sample') }}" method="POST" enctype="multipart/form-data">
+    <div class="form-grid" style="grid-template-columns: 1fr;"> <div class="form-group">
+        <label for="nombre">Nombre del Sample</label>
+        <input type="text" id="nombre" name="nombre" required placeholder="Ej: Guitarra Triste 120bpm Am">
+      </div>
+
+      <div class="form-group">
+        <label for="audio_preview">Archivo de Audio (Preview)</label>
+        <input type="file" id="audio_preview" name="audio_preview" accept="audio/mpeg, audio/wav" required>
+        <small class="muted">El archivo que los usuarios escucharán (obligatorio).</small>
+      </div>
+      
+      <div class="form-group">
+        <label for="file_sample">Archivo de Audio (Descarga)</label>
+        <input type="file" id="file_sample" name="file_sample" accept="audio/mpeg, audio/wav, .zip">
+        <small class="muted">El archivo que el usuario descargará (WAV, MP3 o ZIP). Requerido para licenciar.</small>
+      </div>
+      <div class="form-group">
+        <hr>
+        <label for="tipo_licencia">Tipo de Licencia</label>
+        <select id="tipo_licencia" name="tipo_licencia" onchange="toggleRegalias()">
+          <option value="Gratuita" selected>Gratuita (Solo requiere atribución)</option>
+          <option value="Regalías">Reparto de Regalías (Split)</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="porcentaje-container" style="display: none;">
+        <label for="porcentaje_regalias">Porcentaje de Regalías para ti (%)</label>
+        <input type="number" id="porcentaje_regalias" name="porcentaje_regalias" min="1" max="100" placeholder="Ej: 50">
+      </div>
+      
+      <div class="form-group">
+        <hr>
+        <label for="dnda_registro">Número de Registro DNDA (Opcional)</label>
+        <input type="text" id="dnda_registro" name="dnda_registro" placeholder="Ej: 13-1-123456">
+        <small class="muted">
+          Registro legal de tu obra en Colombia. 
+          <a href="{{ url_for('dnda_info') }}" target="_blank">Aprende a registrarla aquí</a>
+        </small>
+      </div>
+
+      <div class="form-group-checkbox" style="background: #fffbef; border: 1px solid #ffeccc; padding: 10px; border-radius: 8px;">
+        <input type="checkbox" id="declaracion_autoria" name="declaracion_autoria" required>
+        <label for="declaracion_autoria">
+          <strong>Declaración de Autoría (Obligatorio)</strong>
+          <small style="color: var(--muted); display: block;">
+            Declaro que este sample es de mi autoría original y que poseo todos los derechos para licenciarlo.
+          </small>
+        </label>
+      </div>
+      
+      <div class="form-actions" style="border-top: 1px solid #eee; margin-top: 20px;">
+        <button type="submit" class="btn primary">Subir Sample</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  function toggleRegalias() {
+    var tipo = document.getElementById('tipo_licencia').value;
+    var container = document.getElementById('porcentaje-container');
+    if (tipo === 'Regalías') {
+      container.style.display = 'block';
+    } else {
+      container.style.display = 'none';
+    }
+  }
+</script>
+{% endblock %}

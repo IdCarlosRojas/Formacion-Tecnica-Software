@@ -1,0 +1,87 @@
+{% extends 'base_layout.html' %}
+{% block title %}Editar Sample | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <a href="{{ url_for('admin_samples') }}">&larr; Volver a Samples</a>
+  <h2>Editar Sample: {{ sample.Nombre }}</h2>
+  
+  <form action="{{ url_for('admin_edit_sample', sample_id=sample.SampleId) }}" method="POST" enctype="multipart/form-data">
+    <div class="form-grid" style="grid-template-columns: 1fr;"> <div class="form-group">
+        <label for="productor_id">Asignar a Productor</label>
+        <select id="productor_id" name="productor_id" required>
+          {% for prod in productores %}
+          <option value="{{ prod.UsuarioId }}" {% if prod.UsuarioId == sample.UsuarioId %}selected{% endif %}>
+            {{ prod.NombreUsuario }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="nombre">Nombre del Sample</label>
+        <input type="text" id="nombre" name="nombre" value="{{ sample.Nombre }}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="audio_preview">Reemplazar Archivo (Preview)</label>
+        <input type="file" id="audio_preview" name="audio_preview" accept="audio/mpeg, audio/wav">
+        <small>Audio de Preview actual:</small>
+        <audio controls controlsList="nodownload" style="width: 100%; margin-top: 5px; height: 40px;">
+          <source src="{{ url_for('static', filename='uploads/audio/' + sample.audio_preview_url) }}" type="audio/mpeg">
+        </audio>
+      </div>
+      
+      <div class="form-group">
+        <label for="file_sample">Reemplazar Archivo (Descarga)</label>
+        <input type="file" id="file_sample" name="file_sample" accept="audio/mpeg, audio/wav, .zip">
+        {% if sample.file_sample_url %}
+        <small class="muted">Actual: {{ sample.file_sample_url }}</small>
+        {% else %}
+        <small class="muted" style="color: var(--red);">No se ha subido un archivo de descarga.</small>
+        {% endif %}
+      </div>
+      
+      <div class="form-group">
+        <hr>
+        <label for="tipo_licencia">Tipo de Licencia</label>
+        <select id="tipo_licencia" name="tipo_licencia" onchange="toggleRegalias()">
+          <option value="Gratuita" {% if licencia and licencia.Tipo == 'Gratuita' %}selected{% endif %}>
+            Gratuita (Solo requiere atribución)
+          </option>
+          <option value="Regalías" {% if licencia and licencia.Tipo == 'Regalías' %}selected{% endif %}>
+            Reparto de Regalías (Split)
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group" id="porcentaje-container">
+        <label for="porcentaje_regalias">Porcentaje de Regalías para el productor (%)</label>
+        <input type="number" id="porcentaje_regalias" name="porcentaje_regalias" min="1" max="100" 
+               value="{{ licencia.porcentaje_regalias if licencia else '50' }}">
+      </div>
+      
+      <div class="form-group">
+        <hr>
+        <label for="dnda_registro">Número de Registro DNDA (Opcional)</label>
+        <input type="text" id="dnda_registro" name="dnda_registro" value="{{ sample.dnda_registro or '' }}">
+      </div>
+      
+      <div class="form-actions" style="border-top: 1px solid #eee; margin-top: 20px;">
+        <button type="submit" class="btn primary">Guardar Cambios</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  function toggleRegalias() {
+    var tipo = document.getElementById('tipo_licencia').value;
+    var container = document.getElementById('porcentaje-container');
+    container.style.display = (tipo === 'Regalías') ? 'block' : 'none';
+  }
+  // Ejecutar al cargar
+  document.addEventListener('DOMContentLoaded', toggleRegalias);
+</script>
+{% endblock %}

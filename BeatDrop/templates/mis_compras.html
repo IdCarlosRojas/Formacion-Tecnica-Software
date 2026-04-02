@@ -1,0 +1,211 @@
+{% extends 'base_layout.html' %}
+{% block title %}Mis Compras | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+<section class="mis-compras-section">
+  <h2>Mis Compras y Licencias</h2>
+  <p class="section-desc">Aquí encontrarás todos los beats y samples que has licenciado y sus archivos de descarga.</p>
+  
+  <h3>Beats Comprados</h3>
+  {% if compras_beats %}
+  <div class="compras-list">
+    {% for beat, licencia, compra in compras_beats %}
+    <div class="compra-item">
+      <div class="compra-item-cover" 
+           style="background-image: url('{% if beat.cover_url.startswith('http') %}{{ beat.cover_url }}{% else %}{{ url_for('static', filename='uploads/covers/' + beat.cover_url) }}{% endif %}');">
+      </div>
+      
+      <div class="compra-item-info">
+        <h4>{{ beat.Nombre }}</h4>
+        <div class="compra-meta">Artista: {{ beat.artista_ref.NombreUsuario }}</div>
+        <div class="compra-meta">Licencia Adquirida: <strong>{{ licencia.Tipo }}</strong></div>
+        <div class="compra-meta">Fecha: {{ compra.FechaCompra.strftime('%Y-%m-%d') }}</div>
+        
+        <div class="token-info">
+          <strong>Token de Copyright (Llave):</strong>
+          <span class="token-copy" title="Hacer clic para copiar"
+                onclick="copyToken(this, '{{ beat.copyright_token }}')">
+                {{ beat.copyright_token }}
+          </span>
+          <small class="copy-feedback"></small>
+        </div>
+      </div>
+      
+      <div class="compra-actions">
+        {% set file_url = None %}
+        {% if licencia.Tipo == 'Licencia MP3' %}
+          {% set file_url = beat.file_mp3_url %}
+        {% elif licencia.Tipo == 'Licencia WAV' %}
+          {% set file_url = beat.file_wav_url %}
+        {% elif licencia.Tipo == 'Pistas (Stems)' %}
+          {% set file_url = beat.file_stems_url %}
+        {% elif licencia.Tipo == 'Licencia Exclusiva' %}
+          {% set file_url = beat.file_patente_url %}
+        {% endif %}
+
+        {% if file_url %}
+          <a href="{{ url_for('static', filename='uploads/audio/' + file_url) }}" class="btn primary" download>
+            Descargar ({{ licencia.Tipo }})
+          </a>
+        {% else %}
+          <span class="btn secondary" style="cursor: not-allowed; opacity: 0.6;" title="El productor no subió un archivo para esta licencia.">
+            Archivo no disponible
+          </span>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p style="color: var(--muted); margin-bottom: 30px;">Aún no has comprado ningún beat.</p>
+  {% endif %}
+
+  <h3 style="margin-top: 40px;">Samples Licenciados (Contratos)</h3>
+  {% if compras_samples %}
+  <div class="compras-list">
+    {% for sample, licencia, contrato in compras_samples %}
+    <div class="compra-item">
+      <div class="compra-item-cover" 
+           style="background: #eee; display: flex; align-items: center; justify-content: center; font-size: 2em; color: var(--muted);">
+           🎵
+      </div>
+      
+      <div class="compra-item-info">
+        <h4>{{ sample.Nombre }}</h4>
+        <div class="compra-meta">Artista: {{ sample.artista_ref.NombreUsuario }}</div>
+        <div class="compra-meta">
+          Contrato: <strong>{{ licencia.Tipo }}</strong>
+          {% if licencia.Tipo == 'Regalías' %}
+           ({{ licencia.porcentaje_regalias }}% Split)
+          {% endif %}
+        </div>
+        <div class="compra-meta">Fecha: {{ contrato.FechaContrato.strftime('%Y-%m-%d') }}</div>
+        
+        {% if sample.dnda_registro %}
+        <div class="token-info" style="background: #f0f8ff; border: 1px solid #cce5ff; margin-top: 10px;">
+          <strong>🏛️ Registro DNDA:</strong>
+          <span>{{ sample.dnda_registro }}</span>
+        </div>
+        {% endif %}
+      </div>
+      
+      <div class="compra-actions" style="display: flex; flex-direction: column; gap: 10px;">
+        <audio controls controlsList="nodownload" style="width: 100%; height: 40px;">
+          <source src="{{ url_for('static', filename='uploads/audio/' + sample.audio_preview_url) }}" type="audio/mpeg">
+        </audio>
+        
+        {% if sample.file_sample_url %}
+          <a href="{{ url_for('static', filename='uploads/audio/' + sample.file_sample_url) }}" class="btn primary" download>
+            Descargar Sample
+          </a>
+        {% else %}
+          <span class="btn secondary" style="cursor: not-allowed; opacity: 0.6;" title="El productor no subió un archivo de descarga.">
+            Archivo no disponible
+          </span>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p style="color: var(--muted);">Aún no has licenciado ningún sample.</p>
+  {% endif %}
+  </section>
+
+<style>
+  .compras-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .compra-item {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    gap: 20px;
+    align-items: center;
+    background: #fdfdfd;
+    padding: 15px;
+    border-radius: var(--card-radius);
+    border: 1px solid #f0f0f0;
+  }
+  .compra-item-cover {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+  }
+  .compra-item-info h4 {
+    margin: 0 0 5px 0;
+  }
+  .compra-meta {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .token-info {
+    margin-top: 10px;
+    background: #f5f5f5;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  .token-info strong {
+    color: var(--text);
+  }
+  .token-info span.token-copy {
+    color: var(--accent-dark);
+    font-family: monospace;
+    word-break: break-all;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  .token-info span.token-copy:hover {
+    color: var(--accent);
+  }
+  .copy-feedback {
+    display: inline-block;
+    margin-left: 10px;
+    font-weight: 600;
+    color: var(--green);
+  }
+  .compra-actions {
+    text-align: right;
+  }
+  
+  @media (max-width: 700px) {
+    .compra-item {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .compra-item-cover {
+      width: 100%;
+      height: 150px;
+      margin-bottom: 10px;
+    }
+    .compra-actions {
+      text-align: center;
+      margin-top: 15px;
+    }
+  }
+</style>
+
+<script>
+  function copyToken(element, token) {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(token).then(function() {
+        var feedback = element.nextElementSibling;
+        if (feedback) {
+          feedback.textContent = '¡Copiado!';
+          setTimeout(function() {
+            feedback.textContent = '';
+          }, 2000);
+        }
+      }, function(err) {
+        console.error('Error al copiar: ', err);
+      });
+    }
+  }
+</script>
+{% endblock %}

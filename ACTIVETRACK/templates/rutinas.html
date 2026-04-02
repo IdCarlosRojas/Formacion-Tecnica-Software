@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+{% block title %}Mi Rutina{% endblock %}
+
+{% block content %}
+<style>
+/* Estilos para la nueva página de Mi Rutina */
+.rutina-page-container {
+    max-width: 900px; /* Centramos el contenido */
+}
+
+/* 1. Botón de Entrenamiento Vacío (el amarillo) */
+.quick-start-section {
+    margin-bottom: 25px;
+}
+.quick-start-section a {
+    display: block;
+    padding: 25px 20px;
+    background-color: #fff;
+    border: 2px solid #ffa500; /* Borde Naranja/Amarillo */
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+.quick-start-section a:hover {
+    background-color: #fffaf0;
+    box-shadow: 0 4px 10px rgba(255, 165, 0, 0.2);
+}
+
+/* 2. Botones de Gestión (Nueva / Explorar) */
+.routine-management-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+.routine-management-section .btn-management {
+    display: block;
+    padding: 20px;
+    background-color: #fff;
+    border: 2px solid #333; /* Borde Negro */
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
+    color: #333;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+.routine-management-section .btn-management:hover {
+    background-color: #f9f9f9;
+    border-color: #555;
+}
+
+/* 3. Lista de Rutinas Guardadas */
+.saved-routines-section {
+    margin-top: 30px;
+}
+.saved-routines-section h2 {
+    font-size: 1.5em;
+    color: #333;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 20px;
+}
+.saved-routine-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #fff;
+    border: 2px solid #333; /* Borde Negro */
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+.saved-routine-item .routine-name {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #1e1e1e;
+}
+.saved-routine-item .routine-actions {
+    display: flex;
+    gap: 10px;
+}
+/* Botones pequeños de acción */
+.btn-action {
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 0.9em;
+    border: 2px solid transparent;
+    transition: all 0.3s;
+}
+/* "Empezar Rutina" (Azul) */
+.btn-start-routine {
+    background-color: #fff;
+    border-color: #007bff; /* Borde Azul */
+    color: #007bff;
+}
+.btn-start-routine:hover {
+    background-color: #007bff;
+    color: white;
+}
+/* "Editar" (Gris) */
+.btn-edit-routine {
+    background-color: #f0f0f0;
+    color: #333;
+}
+.btn-edit-routine:hover {
+    background-color: #ddd;
+}
+/* "Eliminar" (Rojo) */
+.btn-delete-routine {
+    background-color: #fff;
+    border-color: #dc3545;
+    color: #dc3545;
+}
+.btn-delete-routine:hover {
+    background-color: #dc3545;
+    color: white;
+}
+</style>
+
+<div class="rutina-page-container">
+    <h1>Mi Rutina</h1>
+    
+    <section class="quick-start-section">
+        <a href="{{ url_for('entrenamiento_vacio') }}">Empezar Entrenamiento Vacío</a>
+    </section>
+
+    <section class="routine-management-section">
+        <a href="#" class="btn-management" id="open-nueva-rutina-modal">Nueva Rutina</a>
+        
+        <a href="{{ url_for('explorar_rutinas') }}" class="btn-management">Explorar</a>
+    </section>
+
+    <section class="saved-routines-section">
+        <h2>Mis Rutinas Guardadas</h2>
+
+        {% if rutinas %}
+            {% for rutina in rutinas %}
+            <div class="saved-routine-item">
+                <span class="routine-name">{{ rutina.Nombre }}</span>
+                <div class="routine-actions">
+                    <a href="{{ url_for('rutina_detalle', rutina_id=rutina.RutinaId) }}" class="btn-action btn-edit-routine">Editar</a>
+                    
+                    <a href="{{ url_for('eliminar_rutina', rutina_id=rutina.RutinaId) }}" class="btn-action btn-delete-routine" onclick="return confirm('¿Estás seguro de que quieres eliminar esta rutina?');">Eliminar</a>
+                    
+                    <a href="{{ url_for('empezar_rutina', rutina_id=rutina.RutinaId) }}" class="btn-action btn-start-routine">Empezar Rutina</a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No tienes rutinas guardadas. ¡Crea una con el botón "Nueva Rutina"!</p>
+        {% endif %}
+
+    </section>
+</div>
+
+
+<div id="nueva-rutina-modal" class="modal">
+    <div class="modal-content">
+        <span id="close-nueva-rutina-modal" class="close-btn">&times;</span>
+        <h3>Añadir Nueva Rutina</h3>
+        <p>Dale un nombre a tu nueva rutina (ej. "Día de Pecho y Tríceps").</p>
+        
+        <form action="{{ url_for('crear_rutina') }}" method="POST" class="login-form">
+            <label for="nombre_rutina" style="text-align: left; font-weight: 600;">Nombre de la Rutina:</label>
+            <input type="text" id="nombre_rutina" name="nombre_rutina" required>
+            
+            <button type="submit" class="cta-login">Crear y Personalizar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    // Lógica para el modal de "Nueva Rutina"
+    document.addEventListener('DOMContentLoaded', () => {
+        const rutinaModal = document.getElementById('nueva-rutina-modal');
+        const openBtn = document.getElementById('open-nueva-rutina-modal');
+        const closeBtn = document.getElementById('close-nueva-rutina-modal');
+        
+        if(openBtn) {
+            openBtn.addEventListener('click', (e) => {
+                e.preventDefault(); // Evita que el enlace '#' mueva la página
+                if(rutinaModal) rutinaModal.style.display = 'block';
+            });
+        }
+        if(closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                if(rutinaModal) rutinaModal.style.display = 'none';
+            });
+        }
+        window.addEventListener('click', (event) => {
+            if (event.target === rutinaModal) {
+                rutinaModal.style.display = "none";
+            }
+        });
+    });
+</script>
+{% endblock %}

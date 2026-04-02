@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Agenda y Clases{% endblock %}
+
+{% block content %}
+<h1>Agenda de Clases</h1>
+<p>Reserva tu lugar y no te pierdas tu entrenamiento favorito.</p>
+
+<section class="class-schedule">
+
+    {% for clase in clases %}
+        <div class="class-card {% if clase.reservas|length >= clase.CupoMaximo %}full-class{% endif %}">
+            <div class="class-info">
+                <h3>{{ clase.NombreClase }}</h3>
+                <p><i class="fas fa-clock"></i> {{ clase.FechaHora.strftime('%A %d de %B - %H:%M') }}</p>
+                
+                <p><i class="fas fa-user-tie"></i> 
+                    Instructor: 
+                    {% if clase.entrenador %}
+                        {{ clase.entrenador.Nombre }}
+                    {% else %}
+                        (Por definir)
+                    {% endif %}
+                </p>
+                
+                <p class="capacity">Capacidad: {{ clase.reservas|length }}/{{ clase.CupoMaximo }}
+                    {% if clase.reservas|length >= clase.CupoMaximo %}(Completa){% endif %}
+                </p>
+            </div>
+            
+            {% if clase.ClaseId in mis_reservas %}
+                <button class="cta-small" disabled style="background-color: #5cb85c;">Reservada</button>
+            
+            {% elif clase.reservas|length >= clase.CupoMaximo %}
+                <button class="cta-small" disabled>Completa</button>
+            
+            {% else %}
+                <form action="{{ url_for('reservar_clase', clase_id=clase.ClaseId) }}" method="POST" style="margin:0;">
+                    <button type="submit" class="cta-small">Reservar</button>
+                </form>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="stat-card" style="grid-column: 1 / -1; text-align: center; padding: 30px;">
+            <p style="margin: 0;">No hay clases programadas para los próximos días. Vuelve a consultar más tarde.</p>
+        </div>
+    {% endfor %}
+
+</section>
+{% endblock %}

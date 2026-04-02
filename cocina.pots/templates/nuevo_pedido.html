@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Nuevo Pedido - DigitalFood{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h2>📋 Nuevo Pedido</h2>
+    <p>Registra un nuevo pedido para una mesa</p>
+</div>
+
+<div class="pedido-container">
+    <form method="POST" class="pedido-form">
+        <div class="form-group">
+            <label for="mesa">Número de Mesa:</label>
+            <input type="text" id="mesa" name="mesa" required class="form-input" 
+                   placeholder="Ej: Mesa 1, Mesa 2...">
+        </div>
+        
+        <!-- ===== SECCIÓN DE PRODUCTOS ACTUALIZADA ===== -->
+        <div class="productos-section">
+            <h3>🍽️ Seleccionar Productos</h3>
+            
+            <!-- Bucle principal por categorías -->
+            {% for grupo in productos_agrupados %}
+            <div class="categoria-seccion">
+                <h4 class="categoria-titulo">{{ grupo.nombre }}</h4>
+
+                <div class="productos-grid">
+                    <!-- Bucle anidado por productos dentro de la categoría -->
+                    {% for producto in grupo.productos %}
+                    <div class="producto-selector">
+                        <div class="producto-info">
+                            <h4>{{ producto.nombre }}</h4>
+                            <p class="producto-desc">{{ producto.descripcion }}</p>
+                            <span class="producto-precio">${{ "%.0f"|format(producto.precio) }}</span>
+                        </div>
+                        
+                        <div class="producto-cantidad">
+                            <div class="quantity-stepper">
+                                <button type="button" class="btn-qty btn-minus" disabled>-</button>
+                                <input type="number" name="cantidad[]" min="0" max="{{ producto.stock }}" 
+                                       value="0" class="cantidad-input" readonly>
+                                <button type="button" class="btn-qty btn-plus">+</button>
+                            </div>
+                            <input type="hidden" name="producto_id[]" value="{{ producto.id }}">
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+                 <!-- Se muestra si no hay ningún producto con stock -->
+                <div class="empty-state" style="grid-column: 1 / -1; background: #fff; padding: 2rem;">
+                    <h3 style="color: #666;">😕 No hay productos disponibles</h3>
+                    <p style="color: #666;">Todos los productos están agotados o sin stock. Pide al administrador que añada más.</p>
+                </div>
+            {% endfor %}
+        </div>
+        <!-- ============================================= -->
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">🚀 Enviar a Cocina</button>
+            <a href="{{ url_for('mesero_dashboard') }}" class="btn btn-outline">↩️ Volver al Dashboard</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const steppers = document.querySelectorAll('.quantity-stepper');
+        steppers.forEach(stepper => {
+            const input = stepper.querySelector('.cantidad-input');
+            const btnPlus = stepper.querySelector('.btn-plus');
+            const btnMinus = stepper.querySelector('.btn-minus');
+            const maxStock = parseInt(input.max, 10);
+
+            // Deshabilitar + si el stock es 0 al cargar
+            if (maxStock === 0) {
+                btnPlus.disabled = true;
+            }
+
+            btnPlus.addEventListener('click', () => {
+                let currentValue = parseInt(input.value, 10);
+                if (currentValue < maxStock) {
+                    currentValue++;
+                    input.value = currentValue;
+                }
+                btnMinus.disabled = (currentValue === 0);
+                btnPlus.disabled = (currentValue === maxStock);
+            });
+
+            btnMinus.addEventListener('click', () => {
+                let currentValue = parseInt(input.value, 10);
+                if (currentValue > 0) {
+                    currentValue--;
+                    input.value = currentValue;
+                }
+                btnMinus.disabled = (currentValue === 0);
+                btnPlus.disabled = (currentValue < maxStock); // Re-habilitar plus
+            });
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends "Base.html" %}
+{% block title %}Panel de Artista{% endblock %}
+
+{% block content %}
+<h2>Panel de Artista</h2>
+<p>Bienvenido, <strong>{{ usuario.nombre }}</strong>. Aquí puedes gestionar tu perfil y tus citas.</p>
+
+<div class="dashboard-grid" style="grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+  
+  <div class="card" style="grid-row: 1 / 3;"> <h3>Tu Perfil Público</h3>
+    <form action="{{ url_for('crear_perfil') }}" method="POST">
+      <div class="form-group">
+        <label for="especialidades">Especialidades (Ej: Realismo, Blackwork, Neotradi)</label>
+        <input type="text" id="especialidades" name="especialidades" value="{{ perfil.especialidades or '' }}">
+      </div>
+      <div class="form-group">
+        <label for="ubicacion">Ubicación (Ej: Chapinero, Bogotá)</label>
+        <input type="text" id="ubicacion" name="ubicacion" value="{{ perfil.ubicacion or '' }}">
+      </div>
+      
+      <div class="form-group">
+        <label for="latitud">Coordenadas (Latitud, Longitud)</label>
+        <small style="color: var(--color-text-muted); display: block; margin-top: -10px; margin-bottom: 5px;">
+          Busca tu estudio en <a href="https://www.latlong.net/" target="_blank">latlong.net</a>
+        </small>
+        <div style="display: flex; gap: 10px;">
+          <input type="text" id="latitud" name="latitud" value="{{ perfil.latitud or '' }}" placeholder="Latitud (ej: 4.6097)">
+          <input type="text" id="longitud" name="longitud" value="{{ perfil.longitud or '' }}" placeholder="Longitud (ej: -74.0817)">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="descripcion">Biografía / Descripción</label>
+        <textarea id="descripcion" name="descripcion" rows="4">{{ perfil.descripcion or '' }}</textarea>
+      </div>
+      <div class="form-group">
+        <label for="tarifas">Tarifas (Ej: $150.000/hora)</label>
+        <input type="text" id="tarifas" name="tarifas" value="{{ perfil.tarifas or '' }}">
+      </div>
+      <div class="form-group">
+        <label for="redesSociales">Redes Sociales (Ej: @tu_instagram)</label>
+        <input type="text" id="redesSociales" name="redesSociales" value="{{ perfil.redesSociales or '' }}">
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">Guardar Perfil</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <a href="{{ url_for('nuevo_portafolio') }}" class="btn btn-primary" style="margin-bottom: 1.5rem; background: var(--color-success); text-align: center;">
+      ➕ Añadir Nuevo Trabajo al Portafolio
+    </a>
+    
+    <h4 style="color: var(--color-text);">Citas Pendientes ({{ citas_pendientes | length }})</h4>
+    <div style="overflow-x: auto;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Fecha/Hora</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cita in citas_pendientes %}
+          <tr>
+            <td title="{{ cita.descripcion }}">{{ cita.cliente.nombre }}</td>
+            <td>{{ cita.fecha }}<br>{{ cita.hora }}</td>
+            <td>
+              <form action="{{ url_for('aprobar_cita', cita_id=cita.id) }}" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-small btn-success">Aprobar</button>
+              </form>
+              <form action="{{ url_for('cancelar_cita', cita_id=cita.id) }}" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-small btn-danger">Cancelar</button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="3" style="text-align: center;">No tienes citas pendientes.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4 style="color: var(--color-text);">Citas Aprobadas ({{ citas_aprobadas | length }})</h4>
+    <div style="overflow-x: auto;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Fecha/Hora</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cita in citas_aprobadas %}
+          <tr>
+            <td>{{ cita.cliente.nombre }}</td>
+            <td>{{ cita.fecha }}<br>{{ cita.hora }}</td>
+            <td>
+              <form action="{{ url_for('marcar_completada', cita_id=cita.id) }}" method="POST">
+                <button type="submit" class="btn btn-small btn-warning">Marcar como Completada</button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="3" style="text-align: center;">No tienes citas aprobadas.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

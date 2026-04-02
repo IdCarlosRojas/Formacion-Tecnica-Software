@@ -1,0 +1,142 @@
+{% extends 'base_layout.html' %}
+{% block title %}Editar Beat | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <a href="{{ url_for('perfil', username=session.username) }}">&larr; Volver al Perfil</a>
+  <h2>Editar Beat: {{ beat.Nombre }}</h2>
+  
+  <form action="{{ url_for('edit_beat', beat_id=beat.BeatId) }}" method="POST" enctype="multipart/form-data">
+    <div class="form-grid">
+      
+      <div class="form-group full-width">
+        <label for="nombre">Nombre del Beat</label>
+        <input type="text" id="nombre" name="nombre" value="{{ beat.Nombre }}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="genero">Género</label>
+        <input type="text" id="genero" name="genero" value="{{ beat.Genero }}" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="bpm">BPM</label>
+        <input type="number" id="bpm" name="bpm" value="{{ beat.Bpm }}" required>
+      </div>
+      
+      <div class="form-group full-width">
+        <hr>
+        <p><strong>Token:</strong> <small class="muted">{{ beat.copyright_token }}</small></p>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="dnda_registro">Número de Registro DNDA (Opcional)</label>
+        <input type="text" id="dnda_registro" name="dnda_registro" value="{{ beat.dnda_registro or '' }}">
+        <small class="muted">
+          <a href="{{ url_for('dnda_info') }}" target="_blank">¿No sabes qué es esto? Aprende a registrar tu obra aquí.</a>
+        </small>
+      </div>
+
+      <div class="form-group-checkbox full-width" style="background: #f9f9f9; padding: 10px; border-radius: 8px;">
+        <input type="checkbox" id="monetizado" name="monetizado" {% if beat.monetizado %}checked{% endif %} onchange="toggleMonetizacion()">
+        <label for="monetizado"><strong>Monetizado</strong> (Permitir licencias no exclusivas)</label>
+      </div>
+
+      <div class="form-group-checkbox full-width" style="background: #f9f9f9; padding: 10px; border-radius: 8px;">
+        <input type="checkbox" id="patente_disponible" name="patente_disponible" {% if beat.patente_disponible %}checked{% endif %} onchange="togglePatente()">
+        <label for="patente_disponible"><strong>Licencia Exclusiva Disponible</strong> (Permitir venta exclusiva)</label>
+      </div>
+
+      <div class="form-group full-width">
+        <hr>
+      </div>
+
+      <div class="form-group">
+        <label for="cover">Reemplazar Portada (Opcional)</label>
+        <input type="file" id="cover" name="cover" accept="image/png, image/jpeg">
+        <small>Portada actual:</small>
+        <img src="{% if beat.cover_url.startswith('http') %}{{ beat.cover_url }}{% else %}{{ url_for('static', filename='uploads/covers/' + beat.cover_url) }}{% endif %}" alt="Cover" style="width: 100px; height: 100px; object-fit: cover; border-radius: 6px; margin-top: 5px;">
+      </div>
+      
+      <div class="form-group">
+        <label for="audio_preview">Reemplazar Preview (Opcional)</label>
+        <input type="file" id="audio_preview" name="audio_preview" accept="audio/mpeg, audio/wav">
+        <small>Audio de Preview actual:</small>
+        <audio controls controlsList="nodownload" style="width: 100%; margin-top: 5px;">
+          <source src="{{ url_for('static', filename='uploads/audio/' + beat.audio_preview_url) }}" type="audio/mpeg">
+        </audio>
+      </div>
+      
+      <div id="precios-lease-container" class="form-group full-width" style="padding: 0; margin: 0;">
+        <div class="form-grid"> <div class="form-group">
+            <label for="precio_mp3">Precio Licencia MP3 ($)</label>
+            <input type="number" step="0.01" id="precio_mp3" name="precio_mp3" value="{{ licencias.get('Licencia MP3', '0.00') }}">
+          </div>
+          <div class="form-group">
+            <label for="file_mp3">Reemplazar Archivo MP3</label>
+            <input type="file" id="file_mp3" name="file_mp3" accept="audio/mpeg">
+            {% if beat.file_mp3_url %}<small class="muted">Actual: {{ beat.file_mp3_url }}</small>{% endif %}
+          </div>
+          
+          <div class="form-group">
+            <label for="precio_wav">Precio Licencia WAV ($)</label>
+            <input type="number" step="0.01" id="precio_wav" name="precio_wav" value="{{ licencias.get('Licencia WAV', '0.00') }}">
+          </div>
+          <div class="form-group">
+            <label for="file_wav">Reemplazar Archivo WAV</label>
+            <input type="file" id="file_wav" name="file_wav" accept="audio/wav">
+            {% if beat.file_wav_url %}<small class="muted">Actual: {{ beat.file_wav_url }}</small>{% endif %}
+          </div>
+
+          <div class="form-group">
+            <label for="precio_stems">Precio Pistas (Stems) ($)</label>
+            <input type="number" step="0.01" id="precio_stems" name="precio_stems" value="{{ licencias.get('Pistas (Stems)', '0.00') }}">
+          </div>
+          <div class="form-group">
+            <label for="file_stems">Reemplazar Stems (.zip)</label>
+            <input type="file" id="file_stems" name="file_stems" accept=".zip, application/zip">
+            {% if beat.file_stems_url %}<small class="muted">Actual: {{ beat.file_stems_url }}</small>{% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div id="precio-patente-container" class="form-group full-width" style="padding: 0; margin: 0;">
+         <div class="form-grid"> <div class="form-group">
+            <label for="precio_patente">Precio Licencia Exclusiva ($)</label>
+            <input type="number" step="0.01" id="precio_patente" name="precio_patente" value="{{ licencias.get('Licencia Exclusiva', '0.00') }}">
+          </div>
+          <div class="form-group">
+            <label for="file_patente">Reemplazar Exclusivo (.zip)</label>
+            <input type="file" id="file_patente" name="file_patente" accept=".zip, application/zip">
+            {% if beat.file_patente_url %}<small class="muted">Actual: {{ beat.file_patente_url }}</small>{% endif %}
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn primary">Guardar Cambios</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  function toggleMonetizacion() {
+    var checkbox = document.getElementById('monetizado');
+    var container = document.getElementById('precios-lease-container');
+    container.style.display = checkbox.checked ? 'block' : 'none';
+  }
+  
+  function togglePatente() {
+    var checkbox = document.getElementById('patente_disponible');
+    var container = document.getElementById('precio-patente-container');
+    container.style.display = checkbox.checked ? 'block' : 'none';
+  }
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    toggleMonetizacion();
+    togglePatente();
+  });
+</script>
+{% endblock %}

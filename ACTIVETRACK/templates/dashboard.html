@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <h1>Resumen General</h1>
+    <p>Echa un vistazo rápido a tus métricas y actividades recientes.</p>
+    
+    <section class="stats-grid">
+        <div class="stat-card">
+            <h3>Días Activo</h3>
+            <p class="stat-value">{{ dias_activo }}</p>
+            <p class="stat-label">Entrenamientos Totales</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Último Volumen</h3>
+            <p class="stat-value">{{ ultimo_volumen }} kg</p>
+            <p class="stat-label">Entrenamiento Anterior</p>
+        </div>
+        </section>
+    
+    <section class="section-chart">
+         <h2>Progreso de Volumen Total</h2>
+         <div class="chart-container">
+            <canvas id="dashboardStrengthChart"></canvas> 
+         </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Script para cargar la gráfica del dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+        // Pedimos los datos (igual que en perfil)
+        fetch('{{ url_for("chart_data") }}')
+            .then(response => response.json())
+            .then(data => {
+                
+                const ctxStrength = document.getElementById('dashboardStrengthChart');
+                if (ctxStrength) {
+                    new Chart(ctxStrength, {
+                        type: 'line',
+                        data: {
+                            labels: data.strengthChart.labels,
+                            datasets: [{
+                                label: 'Volumen Total (kg)',
+                                data: data.strengthChart.data,
+                                borderColor: '#007bff',
+                                backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                         options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: { y: { beginAtZero: false } }
+                        }
+                    });
+                }
+            })
+            .catch(error => console.error('Error al cargar datos de gráficas:', error));
+    });
+</script>
+{% endblock %}

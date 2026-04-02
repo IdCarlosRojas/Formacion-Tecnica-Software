@@ -1,0 +1,29 @@
+{% extends 'base_auth.html' %}
+{% block title %}Iniciar Sesión | BeatDrop{% endblock %}
+
+{% block content %}
+<h2>Iniciar Sesión</h2>
+<form action="{{ url_for('login') }}" method="POST" class="auth-form">
+  <label for="email">Correo electrónico</label>
+  <input type="email" id="email" name="email" required>
+  
+  <label for="password">Contraseña</label>
+  <input type="password" id="password" name="password" required>
+  
+  <button type="submit" class="btn primary full">Entrar</button>
+</form>
+
+<p class="auth-link">
+  ¿No tienes cuenta? <a href="{{ url_for('registro') }}">Regístrate aquí</a>
+</p>
+<p class="auth-link">
+  <a href="#" onclick="fillAdminLogin(); return false;">Entrar como Admin</a>
+</p>
+
+<script>
+  function fillAdminLogin() {
+    document.getElementById('email').value = 'admin@beatdrop.com';
+    document.getElementById('password').value = 'admin123';
+  }
+</script>
+{% endblock %}

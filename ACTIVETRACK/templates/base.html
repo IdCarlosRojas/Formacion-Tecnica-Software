@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>ActiveTrack | {% block title %}Dashboard{% endblock %}</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <style>
+        /* (Estilos de Select2 sin cambios) */
+        .select2-container--default .select2-selection--single {
+            width: 100%; height: auto; padding: 10px;
+            border: 1px solid #ccc; border-radius: 5px;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 1.5; padding-left: 0;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 40px;
+        }
+        .select2-container--default .select2-results__group {
+            color: #fff; background-color: #ffa500; font-weight: bold; padding: 6px 10px;
+        }
+        
+        /* ¡NUEVO! Estilo para enlaces de sidebar bloqueados */
+        .sidebar-link-blocked {
+            color: #777 !important;
+            cursor: not-allowed;
+            position: relative;
+        }
+        .sidebar-link-blocked:hover {
+            background-color: #333 !important;
+            color: #777 !important;
+        }
+        .sidebar-link-blocked .fa-lock {
+            margin-left: auto;
+            font-size: 0.8em;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    
+    <header class="header">
+         <div class="logo">
+            <img src="{{ url_for('static', filename='img/ActiveTrack-removebg-preview.png') }}" alt="Logo ActiveTrack"> 
+            <span class="logo-text">ACTIVETRACK</span>
+        </div>
+        
+        <nav class="user-navigation">
+            <ul>
+                <li>Bienvenido, <span id="username-display">{{ session.get('username', 'Usuario') }}</span></li> 
+                <li><a href="{{ url_for('logout') }}" id="logout-btn" class="logout-link">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="dashboard-layout">
+        
+        <aside class="sidebar">
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('dashboard') }}"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                    <li><a href="{{ url_for('perfil') }}"><i class="fas fa-user"></i> Mi Perfil</a></li>
+                    <li><a href="{{ url_for('membresia') }}"><i class="fas fa-credit-card"></i> Mi Membresía</a></li>
+
+                    {% if g.membresia_activa or session.get('is_admin') %}
+                        <li><a href="{{ url_for('rutinas') }}"><i class="fas fa-dumbbell"></i> Mi Rutina</a></li>
+                        <li><a href="{{ url_for('agenda') }}"><i class="fas fa-calendar-alt"></i> Agenda y Clases</a></li>
+                        <li><a href="{{ url_for('perfil') }}"><i class="fas fa-balance-scale"></i> Progreso y Métricas</a></li>
+                        {% if session.get('is_admin') %}
+                            <li><a href="{{ url_for('admin_chat_list') }}"><i class="fas fa-comments"></i> Chat (Admin)</a></li>
+                        {% else %}
+                            <li><a href="{{ url_for('contacto') }}"><i class="fas fa-comment-dots"></i> Contactar Entrenador</a></li>
+                        {% endif %}
+                    {% else %}
+                        <li><a href="{{ url_for('membresia') }}" class="sidebar-link-blocked" title="Requiere membresía activa">
+                                <i class="fas fa-dumbbell"></i> Mi Rutina <i class="fas fa-lock"></i>
+                            </a></li>
+                        <li><a href="{{ url_for('membresia') }}" class="sidebar-link-blocked" title="Requiere membresía activa">
+                                <i class="fas fa-calendar-alt"></i> Agenda y Clases <i class="fas fa-lock"></i>
+                            </a></li>
+                        <li><a href="{{ url_for('membresia') }}" class="sidebar-link-blocked" title="Requiere membresía activa">
+                                <i class="fas fa-balance-scale"></i> Progreso y Métricas <i class="fas fa-lock"></i>
+                            </a></li>
+                        <li><a href="{{ url_for('membresia') }}" class="sidebar-link-blocked" title="Requiere membresía activa">
+                                <i class="fas fa-comment-dots"></i> Contactar Entrenador <i class="fas fa-lock"></i>
+                            </a></li>
+                    {% endif %}
+                    
+                    {% if session.get('is_admin') %}
+                        <li><a href="{{ url_for('admin_dashboard') }}" style="background: #ffc107; color: #333;"><i class="fas fa-user-tie"></i> Panel Admin</a></li>
+                    {% elif session.get('is_instructor') %}
+                        <li><a href="{{ url_for('instructor_clases') }}" style="background: #ffc107; color: #333;"><i class="fas fa-user-tie"></i> Panel Instructor</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </aside>
+        
+        <main class="dashboard-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class="flashes">
+                    {% for category, message in messages %}
+                        <li class="flash-message {{ category }}">{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+            
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

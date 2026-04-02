@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}BeatDrop{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <div class="site">
+    <aside class="sidebar">
+      <div>
+        <div class="brand">
+          <img src="{{ url_for('static', filename='logo-beatdrop.png') }}" alt="Logo BeatDrop" class="logo-img">
+        </div>
+        <nav class="menu">
+          {% set active_page = request.endpoint %}
+          <a href="{{ url_for('index') }}" class="menu-item {% if active_page == 'index' %}active{% endif %}"> Inicio (Beats)</a>
+          
+          <a href="{{ url_for('explorar_samples') }}" class="menu-item {% if active_page.startswith('explorar_samples') or active_page == 'sample_detail' or active_page == 'subir_sample' %}active{% endif %}"> Explorar Samples</a>
+          <a href="{{ url_for('explorar') }}" class="menu-item {% if active_page == 'explorar' %}active{% endif %}"> Explorar Productores</a>
+          
+          <a href="{{ url_for('mi_perfil') }}" class="menu-item {% if active_page == 'perfil' or active_page == 'mi_perfil' or active_page == 'edit_perfil' %}active{% endif %}"> Perfil</a>
+          <a href="{{ url_for('formaciones') }}" class="menu-item {% if active_page == 'formaciones' or active_page == 'formacion_detail' %}active{% endif %}">Formaciones</a>
+          <a href="{{ url_for('guardados') }}" class="menu-item {% if active_page == 'guardados' %}active{% endif %}">Guardados</a>
+          <a href="{{ url_for('mis_compras') }}" class="menu-item {% if active_page == 'mis_compras' %}active{% endif %}">Mis Compras</a>
+          <a href="{{ url_for('mis_ventas') }}" class="menu-item {% if active_page == 'mis_ventas' %}active{% endif %}">Mis Ventas</a>
+
+          <a href="{{ url_for('cart') }}" class="menu-item {% if active_page == 'cart' %}active{% endif %}">
+            Carrito
+            {% if cart_count > 0 %}
+              <span class="cart-count">{{ cart_count }}</span>
+            {% endif %}
+          </a>
+
+          {% if session.rol == 'admin' %}
+            <a href="{{ url_for('admin_dashboard') }}" class="menu-item {% if active_page.startswith('admin') %}active{% endif %}" style="color: var(--accent-dark); border: 1px solid var(--accent);">
+              Panel Admin
+            </a>
+          {% endif %}
+          
+        </nav>
+      </div>
+      <div class="sidebar-bottom">
+        {% if 'user_id' in session %}
+          <a href="{{ url_for('mi_perfil') }}" class="sidebar-username">@{{ session.username }}</a>
+          <a href="{{ url_for('logout') }}" class="btn primary login-btn">Cerrar sesión</a>
+        {% else %}
+          <a href="{{ url_for('login') }}" class="btn primary login-btn">Iniciar sesión</a>
+        {% endif %}
+      </div>
+    </aside>
+    <main class="{% block main_class %}feed{% endblock %}">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flashes-main">
+            {% for category, message in messages %}
+              <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+  {% block footer %}
+  <footer class="site-footer">
+    <small>© 2025 BeatDrop </small>
+  </footer>
+  {% endblock %}
+</body>
+</html>

@@ -1,0 +1,37 @@
+{% extends "admin_base_custom.html" %}
+
+{% block title %}{% if ej %}Editar Ejercicio{% else %}Crear Ejercicio{% endif %}{% endblock %}
+
+{% block content %}
+    {% if ej %}
+        <h1>Editar Ejercicio: {{ ej.Nombre }}</h1>
+    {% else %}
+        <h1>Crear Nuevo Ejercicio</h1>
+    {% endif %}
+
+    <div class="admin-form-container">
+        <form method="POST">
+            <div class="form-grid" style="grid-template-columns: 1fr;"> <div class="form-group full-width">
+                    <label for="nombre">Nombre del Ejercicio</label>
+                    <input type="text" id="nombre" name="nombre" value="{{ ej.Nombre if ej else '' }}" required>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label for="grupo_muscular">Grupo Muscular</label>
+                    <select id="grupo_muscular" name="grupo_muscular" required>
+                        <option value="" disabled {% if not ej %}selected{% endif %}>-- Selecciona un grupo --</option>
+                        {% for group in muscle_groups %}
+                            <option value="{{ group }}" {% if ej and ej.GrupoMuscular == group %}selected{% endif %}>
+                                {{ group }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Guardar Ejercicio</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'base_layout.html' %}
+{% block title %}Gestionar Cursos | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('admin_dashboard') }}">&larr; Volver al Panel</a>
+<div style="display: flex; justify-content: space-between; align-items: center;">
+    <h2>Gestionar Cursos</h2>
+    <a href="{{ url_for('admin_new_curso') }}" class="btn primary">Crear Nuevo Curso</a>
+</div>
+<p class="section-desc">Total: {{ cursos|length }} cursos en la plataforma.</p>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Imagen</th>
+      <th>Título</th>
+      <th>Instructor</th>
+      <th>Categoría</th>
+      <th>Precio</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for curso in cursos %}
+    <tr>
+      <td>{{ curso.CursoId }}</td>
+      <td>
+        <img src="{{ url_for('static', filename=curso.ImagenUrl) }}" alt="Cover" class="admin-beat-cover">
+      </td>
+      <td>{{ curso.Titulo }}</td>
+      <td>@{{ curso.Instructor }}</td>
+      <td>{{ curso.Categoria }}</td>
+      <td>${{ "%.2f"|format(curso.Precio) }}</td>
+      <td class="admin-actions">
+        <a href="{{ url_for('admin_edit_curso', curso_id=curso.CursoId) }}" class="btn-edit-admin">Editar</a>
+        <form action="{{ url_for('admin_delete_curso', curso_id=curso.CursoId) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de que quieres ELIMINAR este curso? Esta acción borrará sus inscripciones asociadas.');">
+          <button type="submit" class="btn-danger-admin">
+            Eliminar
+          </button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- Estilos (copiados de admin_beats.html para consistencia) -->
+<style>
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  .admin-table th, .admin-table td {
+    padding: 12px;
+    border: 1px solid #eee;
+    text-align: left;
+    vertical-align: middle;
+  }
+  .admin-table th {
+    background: #f9f9f9;
+  }
+  .admin-beat-cover {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+  .admin-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .btn-edit-admin {
+    background: #cce5ff;
+    color: #004085;
+    border: 1px solid #b8daff;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .btn-danger-admin {
+    background: #f8d7da;
+    color: var(--red);
+    border: 1px solid var(--red);
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+</style>
+{% endblock %}

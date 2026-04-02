@@ -1,0 +1,40 @@
+{% extends "Base.html" %}
+{% block title %}Gestionar Citas{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('admin_dashboard') }}" style="color: var(--color-text-muted); margin-bottom: 1rem; display: inline-block;">⟵ Volver al Panel de Admin</a>
+<h2>Historial de Todas las Citas ({{ citas | length }})</h2>
+
+<div class="card" style="grid-column: 1 / -1; padding: 2.5rem;">
+  <div style="overflow-x: auto;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Cliente</th>
+          <th>Tatuador</th>
+          <th>Fecha/Hora</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cita in citas %}
+        <tr>
+          <td>{{ cita.id }}</td>
+          <td>{{ cita.cliente.nombre }}</td>
+          <td>{{ cita.tatuador.nombre }}</td>
+          <td>{{ cita.fecha }} a las {{ cita.hora }}</td>
+          <td>
+            <span class="status-{{ cita.estado | lower }}">{{ cita.estado }}</span>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="5" style="text-align: center;">No hay citas en el sistema.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

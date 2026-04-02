@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Gestión de Pedidos - DigitalFood{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h2>📋 Gestión de Pedidos</h2>
+    <p>Administra todos los pedidos del restaurante</p>
+</div>
+
+<div class="actions-bar">
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">
+        ↩️ Volver al Dashboard
+    </a>
+</div>
+
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Mesa</th>
+                <th>Estado</th>
+                <th>Total</th>
+                <th>Mesero</th>
+                <th>Hora</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if pedidos %}
+                {% for pedido in pedidos %}
+                <tr>
+                    <td>{{ pedido.id }}</td>
+                    <td><strong>{{ pedido.mesa }}</strong></td>
+                    <td>
+                        <!-- Badge de estado dinámico -->
+                        <span class="estado-badge estado-{{ pedido.estado|lower }}">
+                            {{ pedido.estado|title }}
+                        </span>
+                    </td>
+                    <td>${{ "%.0f"|format(pedido.total) }}</td>
+                    <td>{{ pedido.usuario.nombre }}</td>
+                    <td>{{ pedido.fecha_hora.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td class="actions">
+                        <!-- Mostrar el botón solo si el pedido NO está completado -->
+                        {% if pedido.estado != 'completado' %}
+                        <form action="{{ url_for('marcar_pedido_completado', id=pedido.id) }}" method="POST"
+                              onsubmit="return confirm('¿Estás seguro de que quieres completar este pedido?');">
+                            <button type="submit" class="btn btn-success btn-sm">Completar</button>
+                        </form>
+                        {% else %}
+                        <span>-</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 2rem;">
+                        No hay pedidos registrados.
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

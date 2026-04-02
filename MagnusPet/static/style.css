@@ -1,0 +1,946 @@
+/* Paleta beige y café claro con toques de verde suave */
+:root {
+  --beige-claro: #fcf8f3; /* Fondo principal */
+  --beige-medio: #f2e7d7; /* Header, modales, etc. */
+  --cafe-suave: #b8916d; /* Botones principales, acentos */
+  --cafe-oscuro: #8c6a4a; /* Texto principal, elementos clave */
+  --verde-pet: #9bcc9a; /* Nuevo color de acento para la marca (ej: span del logo) */
+  --verde-oscuro-pet: #6a9c69; /* Verde más oscuro */
+  --texto-general: #4a3d31; /* Un color de texto más suave */
+  --sombra-suave: rgba(0, 0, 0, 0.08);
+  --sombra-media: rgba(0, 0, 0, 0.12);
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente más moderna */
+  background-color: var(--beige-claro);
+  color: var(--texto-general);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--beige-claro);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--cafe-suave);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cafe-oscuro);
+}
+
+
+/* Header */
+header {
+  background: var(--beige-medio);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px; /* Un poco más de padding */
+  box-shadow: 0 4px 12px var(--sombra-suave); /* Sombra más pronunciada */
+  position: sticky;
+  top: 0;
+  z-index: 100; /* Aseguramos que esté por encima */
+}
+
+.logo {
+  font-size: 1.8rem; /* Logo un poco más grande */
+  font-weight: 700;
+  color: var(--cafe-oscuro);
+}
+.logo span { 
+  color: var(--verde-pet); /* El span del logo con el nuevo color */
+  font-weight: 800; /* Más énfasis */
+}
+
+nav button {
+  background: none;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--cafe-oscuro);
+  margin: 0 12px; /* Más espacio entre botones */
+  padding: 8px 0;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+  font-size: 1rem;
+}
+nav button.active, nav button:hover {
+  color: var(--cafe-suave);
+}
+nav button.active::after, nav button:hover::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 3px;
+  background: var(--verde-pet); /* Subrayado con el color verde */
+  border-radius: 2px;
+}
+nav button.active::after {
+  animation: slideIn 0.3s forwards;
+}
+@keyframes slideIn {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+#user-actions {
+  display: flex;
+  gap: 15px; /* Más espacio */
+  align-items: center;
+}
+
+.btn {
+  background: var(--cafe-suave);
+  color: #fff;
+  border: none;
+  padding: 10px 18px; /* Un poco más de padding */
+  border-radius: 25px; /* Bordes más redondeados (efecto píldora) */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 5px var(--sombra-suave);
+}
+.btn:hover { 
+  background: var(--cafe-oscuro); 
+  box-shadow: 0 4px 8px var(--sombra-media);
+  transform: translateY(-2px);
+}
+.btn.ghost {
+  background: transparent;
+  border: 2px solid var(--cafe-suave);
+  color: var(--cafe-oscuro);
+  box-shadow: none;
+}
+.btn.ghost:hover {
+  background: var(--cafe-suave);
+  color: #fff;
+  box-shadow: 0 4px 8px var(--sombra-suave);
+}
+.btn.small { 
+  font-size: 0.85rem; 
+  padding: 8px 14px; 
+  border-radius: 20px;
+}
+.btn.danger { 
+  background-color: #e76f51; /* Rojo más amigable */
+}
+.btn.danger:hover {
+  background-color: #d6583d;
+}
+
+
+/* Páginas */
+.page {
+  padding: 30px 20px; /* Más padding general */
+  transition: opacity 0.5s ease-out; /* Transición más suave */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.hidden { 
+  display: none !important; 
+  opacity: 0; 
+  visibility: hidden; /* Aseguramos que no ocupe espacio ni sea accesible */
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  margin-top: 80px; /* Más espacio arriba */
+  padding: 40px 20px;
+  background: linear-gradient(135deg, var(--beige-medio) 0%, var(--beige-claro) 100%);
+  border-radius: 20px; /* Bordes redondeados */
+  box-shadow: 0 6px 20px var(--sombra-media);
+}
+.hero h1 {
+  font-size: 3rem; /* Título más grande */
+  font-weight: 800;
+  color: var(--cafe-oscuro);
+  margin-bottom: 15px;
+}
+.hero h1 span { 
+  color: var(--verde-pet); 
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.05); /* Sutil sombra al nombre */
+}
+.hero p {
+  font-size: 1.2rem; /* Texto más grande */
+  color: var(--texto-general);
+  margin-bottom: 30px;
+}
+.hero-btns { 
+  margin-top: 30px; 
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Espacio entre botones */
+}
+.hero-btns .btn {
+  min-width: 180px; /* Ancho mínimo para los botones */
+}
+
+
+/* Catálogo */
+h2 {
+  font-size: 2rem;
+  color: var(--cafe-oscuro);
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative;
+}
+h2::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -10px;
+  width: 80px;
+  height: 4px;
+  background-color: var(--verde-pet);
+  border-radius: 2px;
+}
+
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Tarjetas más grandes */
+  gap: 30px; /* Más espacio entre productos */
+}
+.product {
+  border: none; /* Quitamos el borde */
+  background: #fff;
+  border-radius: 15px; /* Bordes más redondeados */
+  box-shadow: 0 5px 15px var(--sombra-suave); /* Sombra más suave */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Para que la imagen respete el border-radius */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.product:hover {
+  transform: translateY(-5px); /* Efecto hover */
+  box-shadow: 0 8px 20px var(--sombra-media);
+}
+.product-image {
+  width: 100%;
+  height: 220px; /* Imágenes un poco más altas */
+  object-fit: cover;
+  border-bottom: 1px solid var(--beige-medio);
+}
+.product-info {
+  padding: 18px; /* Más padding */
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.product-info .title { 
+  font-weight: 700; 
+  font-size: 1.2rem;
+  color: var(--cafe-oscuro);
+  margin-bottom: 8px;
+}
+.product-info .desc { 
+  font-size: 0.95rem; 
+  color: #6a5a4a; /* Color de texto más cálido */
+  margin: 5px 0 15px 0; 
+  flex-grow: 1; 
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limita la descripción a 3 líneas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.product-info .price { 
+  font-weight: bold; 
+  font-size: 1.3rem; /* Precio más grande */
+  color: var(--verde-oscuro-pet); /* Precio en verde */
+  margin: 10px 0; 
+}
+.product-info .btn-comprar { 
+  width: 100%; 
+  margin-top: 15px;
+}
+
+
+/* Perfil y Layout General */
+.profile-card {
+  background: #fff;
+  padding: 25px; /* Más padding */
+  border-radius: 15px; /* Bordes más suaves */
+  margin-bottom: 20px;
+  box-shadow: 0 3px 10px var(--sombra-suave);
+  border: 1px solid var(--beige-medio); /* Borde sutil */
+}
+#profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Más espacio */
+}
+#profile-form label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--cafe-oscuro);
+  margin-top: 5px;
+}
+#profile-form input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px; /* Bordes de input más redondeados */
+  border: 1px solid var(--beige-medio);
+  box-sizing: border-box; 
+  font-size: 1rem;
+  color: var(--texto-general);
+  transition: border-color 0.3s ease;
+}
+#profile-form input:focus {
+  border-color: var(--cafe-suave);
+  outline: none;
+}
+#profile-form input:disabled {
+  background: #f5f5f5; /* Fondo más claro para disabled */
+  cursor: not-allowed;
+}
+
+/* Modal */
+.modal {
+  display: flex;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4); /* Fondo más oscuro */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Aseguramos que esté por encima de todo */
+  backdrop-filter: blur(3px); /* Efecto de desenfoque */
+}
+.modal.hidden { display: none; }
+
+.modal-content {
+  background: var(--beige-claro); /* Fondo claro para el modal */
+  padding: 30px;
+  border-radius: 20px; /* Bordes más redondeados */
+  width: 90%;
+  max-width: 450px; /* Un poco más ancho */
+  position: relative;
+  color: var(--texto-general);
+  box-shadow: 0 8px 25px var(--sombra-media);
+  animation: fadeInModal 0.3s ease-out; /* Animación de entrada */
+}
+@keyframes fadeInModal {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.modal-close {
+  position: absolute;
+  top: 15px; right: 15px; /* Más espacio */
+  background: none;
+  border: none;
+  font-size: 1.8rem; /* Icono de cierre más grande */
+  cursor: pointer;
+  color: var(--cafe-oscuro);
+  transition: transform 0.2s ease;
+}
+.modal-close:hover {
+  transform: rotate(90deg);
+}
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 25px; /* Más espacio */
+  border-bottom: 1px solid var(--beige-medio);
+}
+.tabs button {
+  background: none;
+  border: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding: 10px 15px;
+  color: var(--texto-general);
+  position: relative;
+  transition: color 0.3s ease;
+}
+.tabs button.active {
+  color: var(--cafe-suave);
+}
+.tabs button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--verde-pet);
+  border-radius: 2px;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0; /* Más margen */
+  border-radius: 8px;
+  border: 1px solid var(--beige-medio);
+  box-sizing: border-box; 
+  font-size: 1rem;
+  color: var(--texto-general);
+}
+.msg {
+  font-size: 0.95rem;
+  color: #e76f51; /* Rojo más amigable */
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 500;
+}
+.msg.success {
+  color: var(--verde-oscuro-pet); /* Verde para mensajes de éxito */
+}
+
+/* Carrito */
+#cart-count, #notif-count {
+  font-weight: bold;
+  background-color: var(--verde-pet); /* Color verde para contadores */
+  color: white;
+  border-radius: 50%;
+  padding: 3px 7px;
+  font-size: 0.8rem;
+  position: relative;
+  top: -8px; /* Ajuste de posición */
+  left: -5px;
+}
+.cart-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px;
+  padding-top: 15px;
+  border-top: 1px solid var(--beige-medio);
+}
+.cart-summary strong {
+  font-size: 1.3rem;
+  color: var(--cafe-oscuro);
+}
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--beige-medio); /* Borde punteado */
+}
+.cart-item:last-child {
+  border-bottom: none;
+}
+#cart-items-list {
+  max-height: 350px; /* Más alto */
+  overflow-y: auto;
+  padding-right: 10px; /* Para el scrollbar */
+}
+
+
+/* Layout para perfil, mascotas y citas */
+.profile-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 30px; /* Más espacio */
+  margin-top: 40px;
+}
+
+#mascota-form, #cita-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+#mascota-form label, #cita-form label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--cafe-oscuro);
+  margin-top: 5px;
+}
+#mascota-form button, #cita-form button {
+  margin-top: 20px;
+}
+
+/* --- Estilos para las tarjetas de mascota --- */
+.mascotas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Tarjetas más grandes */
+    gap: 20px;
+}
+
+.mascota-card {
+    background: #fff;
+    border: 1px solid var(--beige-medio);
+    border-radius: 15px; /* Más redondeado */
+    box-shadow: 0 4px 12px var(--sombra-suave);
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.mascota-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px var(--sombra-media);
+}
+.mascota-card-img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    border-radius: 10px; /* Bordes de imagen más suaves */
+    background-color: #f0f0f0;
+    margin-bottom: 10px;
+}
+.mascota-card-info {
+    padding: 5px 0; /* Menos padding vertical */
+    flex-grow: 1;
+}
+.mascota-card-info strong {
+    font-size: 1.2rem;
+    display: block;
+    color: var(--cafe-oscuro);
+    margin-bottom: 5px;
+}
+.mascota-card-info span {
+    font-size: 0.95rem;
+    color: #6a5a4a;
+    display: block;
+}
+.mascota-card-info small {
+    font-size: 0.85rem;
+    color: var(--verde-oscuro-pet);
+    display: block;
+    margin-top: 5px;
+}
+
+.photo-upload-form {
+    margin: 15px 0 10px 0; /* Más margen arriba */
+    border-top: 1px dashed var(--beige-medio);
+    padding-top: 15px;
+}
+.photo-upload-form .btn {
+    width: 100%;
+    margin-top: 8px;
+}
+.photo-input {
+    display: none; 
+}
+.photo-upload-form .btn-label {
+    background: var(--beige-claro);
+    color: var(--cafe-oscuro);
+    border: 2px dashed var(--cafe-suave); /* Borde punteado para el área de carga */
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+.photo-upload-form .btn-label:hover {
+    background: var(--cafe-suave);
+    color: white;
+    border-color: var(--cafe-suave);
+}
+
+
+.mascota-card-actions {
+    display: flex;
+    gap: 10px; /* Más espacio */
+    margin-top: 15px;
+    border-top: 1px solid var(--beige-medio);
+    padding-top: 15px;
+}
+.mascota-card-actions .btn {
+    flex: 1;
+}
+
+/* Lista de citas */
+.cita-item {
+  position: relative;
+  border: 1px solid var(--beige-medio);
+  background: #fff;
+  padding: 18px; /* Más padding */
+  border-radius: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 8px var(--sombra-suave);
+}
+.cita-item p {
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+}
+.cita-item strong {
+  color: var(--cafe-oscuro);
+}
+.status-badge {
+  position: absolute;
+  top: 15px; right: 15px;
+  background: var(--cafe-suave);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px; /* Bordes más redondeados */
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.status-pendiente {
+    background-color: #fbc658; /* Amarillo-naranja más cálido */
+}
+.status-programada {
+    background-color: var(--verde-pet); /* Verde para programada */
+}
+.status-cancelada {
+    background-color: #ef7b62; /* Rojo suave */
+}
+
+/* Notificaciones */
+.notif-item {
+  padding: 12px;
+  border-bottom: 1px dashed var(--beige-medio);
+}
+.notif-item:last-child { border: none; }
+.notif-item small { 
+  color: var(--cafe-suave); 
+  font-size: 0.8rem;
+  display: block;
+  margin-top: 5px;
+}
+.notif-item p {
+  margin: 0;
+  color: var(--texto-general);
+}
+
+/* Tabla de historial/vacunas */
+#vacunas-table {
+  width: 100%;
+  border-collapse: separate; /* Para que border-radius funcione */
+  border-spacing: 0;
+  margin-top: 20px;
+  border-radius: 10px;
+  overflow: hidden; /* Asegura que las esquinas se redondeen */
+  box-shadow: 0 2px 8px var(--sombra-suave);
+}
+#vacunas-table th, #vacunas-table td {
+  border: 1px solid var(--beige-medio);
+  padding: 12px;
+  text-align: left;
+}
+#vacunas-table th { 
+  background-color: var(--beige-medio); 
+  color: var(--cafe-oscuro);
+  font-weight: 600;
+}
+#vacunas-table tr:nth-child(even) {
+  background-color: #fbf5ee; /* Cebra suave */
+}
+
+/* Estilos para Términos y Condiciones */
+.terms-check {
+  display: flex;
+  align-items: flex-start; /* Alineación superior */
+  gap: 12px;
+  margin: 15px 0;
+}
+.terms-check input[type="checkbox"] {
+  width: 20px; /* Tamaño del checkbox */
+  height: 20px;
+  min-width: 20px; /* Aseguramos tamaño fijo */
+  min-height: 20px;
+  margin: 0;
+  appearance: none; /* Ocultar el estilo nativo */
+  border: 2px solid var(--cafe-suave);
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0; /* No se encoge */
+}
+.terms-check input[type="checkbox"]:checked {
+  background-color: var(--verde-pet);
+  border-color: var(--verde-pet);
+}
+.terms-check input[type="checkbox"]:checked::before {
+  content: '✔'; /* Marca de verificación personalizada */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 14px;
+}
+.terms-check label {
+  font-size: 0.9rem;
+  color: #6a5a4a;
+  line-height: 1.4;
+}
+.terms-check a {
+  color: var(--cafe-suave);
+  text-decoration: none;
+  font-weight: 600;
+}
+.terms-check a:hover {
+  text-decoration: underline;
+}
+
+/* --- Estilos para la nueva sección de Inicio (Planteamiento y Justificación) --- */
+.page-container {
+  max-width: 1200px;
+  margin: 60px auto; /* Más margen para separarlo del hero */
+  padding: 0 20px;
+}
+
+.about-summary {
+  background: var(--beige-medio); /* Fondo del contenedor principal */
+  border-radius: 25px; /* Bordes más redondeados */
+  padding: 40px; /* Más padding */
+  box-shadow: 0 8px 25px var(--sombra-media);
+  border: none; /* Quitamos el borde, ya tenemos sombra */
+  text-align: center; /* Centramos el texto dentro */
+}
+
+.about-summary h2 {
+  font-size: 2.2rem;
+  color: var(--cafe-oscuro);
+  margin-top: 0;
+  margin-bottom: 40px;
+}
+.about-summary h2::after {
+  background-color: var(--cafe-suave); /* Color del subrayado */
+}
+
+
+.about-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px; /* Más espacio entre columnas */
+  text-align: left; /* Alineamos el texto a la izquierda dentro de las columnas */
+}
+
+.about-columns .column {
+  padding: 20px; /* Más padding interno */
+  border-radius: 15px; /* Bordes redondeados */
+  background: #fff; /* Fondo blanco para las columnas */
+  box-shadow: 0 4px 15px var(--sombra-suave);
+  border-left: 5px solid var(--verde-pet); /* Borde izquierdo con el color verde */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.about-columns .column:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px var(--sombra-media);
+}
+
+.about-columns h3 {
+  color: var(--cafe-oscuro); /* Color de los títulos de columna */
+  margin-top: 0;
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+}
+
+.about-columns p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--texto-general);
+}
+
+
+/* --- Estilos para la página "Sobre Nosotros" --- */
+.about-intro {
+  font-size: 1.15rem;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 50px auto; /* Más margen inferior */
+  color: var(--texto-general);
+  line-height: 1.7;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.about-card {
+  background: #fff;
+  border-radius: 15px;
+  padding: 30px; /* Más padding */
+  box-shadow: 0 5px 15px var(--sombra-suave);
+  /* Borde superior de color para un toque de diseño */
+  border-top: 5px solid var(--verde-pet);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Damos colores distintos a cada borde */
+.about-card:nth-child(2) {
+  border-top-color: var(--cafe-suave);
+}
+
+.about-card:nth-child(3) {
+  border-top-color: var(--verde-oscuro-pet);
+}
+
+.about-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px var(--sombra-media);
+}
+
+.card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.about-card h3 {
+  font-size: 1.5rem;
+  color: var(--cafe-oscuro);
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.about-card p, .about-card ul {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--texto-general);
+}
+
+.about-card ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.about-card li {
+  margin-bottom: 10px;
+}
+
+/* Sección de Propósito */
+.purpose-section {
+  background: var(--beige-medio);
+  border-radius: 20px;
+  padding: 40px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.purpose-section h3 {
+  font-size: 1.8rem;
+  color: var(--cafe-oscuro);
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.purpose-section p {
+  font-size: 1.1rem;
+  max-width: 900px;
+  margin: 0 auto;
+  line-height: 1.8;
+  color: var(--texto-general);
+}
+
+/* Sección del Equipo */
+.team-section {
+  background: #fff;
+  border: 1px dashed var(--cafe-suave);
+  border-radius: 15px;
+  padding: 30px;
+  text-align: center;
+}
+
+.team-section h3 {
+  font-size: 1.5rem;
+  color: var(--cafe-oscuro);
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.team-section p {
+  font-size: 1rem;
+  color: var(--texto-general);
+  margin-bottom: 20px;
+}
+
+.team-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.team-section li {
+  font-weight: 600;
+  color: var(--verde-oscuro-pet);
+  background: var(--beige-claro);
+  padding: 8px 15px;
+  border-radius: 20px;
+}
+
+/* Responsive */
+@media (max-width: 992px) { /* Ajuste para tablets y pantallas medianas */
+  header { padding: 10px 20px; }
+  nav button { margin: 0 6px; font-size: 0.9rem; }
+  .hero h1 { font-size: 2.5rem; }
+  .hero p { font-size: 1.1rem; }
+  .hero-btns .btn { min-width: 150px; padding: 8px 15px; }
+  h2 { font-size: 1.8rem; margin-bottom: 30px; }
+  .product-list {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  .profile-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .about-columns {
+    grid-template-columns: 1fr 1fr; /* Dos columnas en tablets */
+    gap: 20px;
+  }
+  .about-summary { padding: 30px; }
+  .about-summary h2 { font-size: 2rem; margin-bottom: 30px; }
+  .about-columns .column { padding: 18px; }
+  .about-columns h3 { font-size: 1.2rem; }
+}
+
+@media (max-width: 768px) {
+  nav {
+    display: none; 
+  }
+  .logo { font-size: 1.6rem; }
+  .hero { margin-top: 40px; padding: 30px 15px; }
+  .hero h1 { font-size: 2rem; }
+  .hero p { font-size: 1rem; }
+  .hero-btns { flex-direction: column; gap: 10px; }
+  .hero-btns .btn { width: 100%; min-width: auto; }
+  .product-list {
+    grid-template-columns: 1fr 1fr;
+  }
+  .mascotas-grid {
+    grid-template-columns: 1fr; 
+  }
+  .about-columns {
+    grid-template-columns: 1fr; /* Una columna en móvil */
+    gap: 15px;
+  }
+  .about-summary { padding: 20px; }
+  .about-summary h2 { font-size: 1.6rem; margin-bottom: 20px; }
+  .about-columns .column { padding: 15px; }
+  .about-columns h3 { font-size: 1.1rem; }
+  .modal-content { max-width: 350px; padding: 25px; }
+  .modal-close { font-size: 1.5rem; }
+  .tabs button { font-size: 1rem; padding: 8px 10px; }
+}
+
+@media (max-width: 480px) {
+  header { padding: 10px 15px; }
+  .logo { font-size: 1.4rem; }
+  .hero h1 { font-size: 1.8rem; }
+  .hero p { font-size: 0.9rem; }
+  .product-list {
+    grid-template-columns: 1fr;
+  }
+  .product-info .price { font-size: 1.2rem; }
+  .about-summary h2 { font-size: 1.4rem; }
+  .about-columns h3 { font-size: 1rem; }
+  .about-columns p { font-size: 0.9rem; }
+}

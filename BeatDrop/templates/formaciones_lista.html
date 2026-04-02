@@ -1,0 +1,34 @@
+{% extends 'base_layout.html' %}
+{% block title %}Formaciones | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+<section class="formaciones-section">
+  <h2>Formaciones y Cursos</h2>
+  <p class="section-desc">Desarrolla tus habilidades con cursos creados por expertos de la industria.</p>
+  
+  <div class="cursos-grid">
+    {% for curso in cursos %}
+    <div class="curso-card">
+      <a href="{{ url_for('formacion_detail', curso_id=curso.CursoId) }}">
+        <div class="curso-card-img" style="background-image: url('{{ url_for('static', filename=curso.ImagenUrl) }}');"></div>
+      </a>
+      <div class="curso-card-info">
+        <h3><a href="{{ url_for('formacion_detail', curso_id=curso.CursoId) }}">{{ curso.Titulo }}</a></h3>
+        <p class="meta">Por: {{ curso.Instructor }}</p>
+        <div class="curso-card-meta">
+          <span class="curso-categoria">{{ curso.Categoria }}</span>
+          {% if curso.CursoId in cursos_comprados_ids %}
+            <span class="btn secondary" style="cursor: default; padding: 4px 8px;">Adquirido</span>
+          {% else %}
+            <span class="curso-precio">${{ "%.2f"|format(curso.Precio) }}</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <p>No hay cursos disponibles en este momento.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

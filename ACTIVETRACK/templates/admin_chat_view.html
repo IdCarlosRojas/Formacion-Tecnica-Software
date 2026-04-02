@@ -1,0 +1,43 @@
+{% extends "admin_base_custom.html" %}
+{% block title %}Chat con {{ destinatario.Nombre }}{% endblock %}
+
+{% block content %}
+<h1>Chat con {{ destinatario.Nombre }}</h1>
+<a href="{{ url_for('admin_chat_list') }}" style="text-decoration: none; color: #ffa500; font-weight: 500;">&lt; Volver a la lista de usuarios</a>
+
+<section class="chat-section" style="margin-top: 20px;">
+    <div class="chat-box" id="chat-box">
+        
+        {% for msg in mensajes %}
+            {% if msg.RemitenteId == admin_id %}
+            <div class="chat-message user">
+                <p>{{ msg.Mensaje }}</p>
+            </div>
+            {% else %}
+            <div class="chat-message trainer">
+                <p>{{ msg.Mensaje }}</p>
+            </div>
+            {% endif %}
+        {% else %}
+        <p style="text-align: center; color: #aaa; padding-top: 20px;">No hay mensajes. ¡Inicia la conversación!</p>
+        {% endfor %}
+    </div>
+
+    <form id="chat-form" class="chat-input-area" method="POST" action="{{ url_for('enviar_mensaje_admin', user_id=destinatario.UsuarioId) }}">
+        <input type="text" id="chat-input" name="mensaje" placeholder="Escribe tu mensaje..." required>
+        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+    </form>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Script para que el chat siempre muestre el último mensaje
+    document.addEventListener('DOMContentLoaded', () => {
+        const chatBox = document.getElementById('chat-box');
+        if (chatBox) {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    });
+</script>
+{% endblock %}

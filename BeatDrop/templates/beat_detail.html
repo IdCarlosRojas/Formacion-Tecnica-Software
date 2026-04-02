@@ -1,0 +1,96 @@
+{% extends 'base_layout.html' %}
+{% block title %}{{ beat.Nombre }} | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+<div class="beat-detail-container">
+  <div class="beat-detail-cover">
+    <img src="{% if beat.cover_url.startswith('http') %}{{ beat.cover_url }}{% else %}{{ url_for('static', filename='uploads/covers/' + beat.cover_url) }}{% endif %}" alt="Cover de {{ beat.Nombre }}">
+  </div>
+  
+  <div class="beat-detail-info">
+    <h1>{{ beat.Nombre }}</h1>
+    <div class="beat-detail-meta">
+      Por <a href="{{ url_for('search', q='@' + beat.artista_ref.NombreUsuario) }}">{{ beat.artista_ref.NombreUsuario }}</a> • {{ beat.Bpm }} BPM • {{ beat.Genero }}
+    </div>
+
+    <audio controls controlsList="nodownload" style="width: 100%; margin-bottom: 20px;">
+      <source src="{{ url_for('static', filename='uploads/audio/' + beat.audio_preview_url) }}" type="audio/mpeg">
+      Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    {% if beat.dnda_registro %}
+    <div style="background: #f0f8ff; border: 1px solid #cce5ff; padding: 10px 15px; border-radius: 8px; margin-bottom: 20px; font-size: 14px;">
+      <strong>🏛️ Obra Registrada (DNDA):</strong> {{ beat.dnda_registro }}
+      <br>
+      <small class="muted">El productor ha registrado esta obra ante la Dirección Nacional de Derecho de Autor.</small>
+    </div>
+    {% endif %}
+
+    <div class="beat-detail-actions">
+      <form action="{{ url_for('toggle_favorito', beat_id=beat.BeatId) }}" method="POST" style="display: inline;">
+        <button type="submit" class="btn secondary {% if beat.BeatId in favoritos_ids %}saved{% endif %}">
+          {% if beat.BeatId in favoritos_ids %}
+            Guardado
+          {% else %}
+            Guardar
+          {% endif %}
+        </button>
+      </form>
+    </div>
+
+    <div class="licencias-list">
+      
+      {% if beat.monetizado == false and beat.patente_disponible == false %}
+        <h3>Licencias</h3>
+        <div class="licencia-item" style="justify-content: center;">
+          <p style="color: var(--muted); font-weight: 600;">Este beat ya fue vendido (Exclusiva).</p>
+        </div>
+      {% else %}
+        <h3>Licencias Disponibles</h3>
+        
+        {% for lic in licencias %}
+          {% if lic.Tipo == 'Licencia Exclusiva' %}
+            <div class="licencia-item" style="background: #fffaf0; border: 1px solid var(--accent); border-radius: 8px; padding: 15px;">
+              <div>
+                <div class="licencia-tipo" style="color: var(--accent-dark);">⭐️ {{ lic.Tipo }}</div>
+                <div class="licencia-desc">{{ lic.Descripcion }}</div>
+              </div>
+              <div class="licencia-precio">${{ "%.2f"|format(lic.Precio) }}</div>
+              <div class="licencia-comprar">
+                <form action="{{ url_for('add_to_cart', beat_id=beat.BeatId, licencia_id=lic.LicenciaId) }}" method="POST">
+                  <button type="submit" class="btn primary">Comprar Exclusiva</button>
+                </form>
+              </div>
+            </div>
+          {% elif beat.monetizado %}
+        <div class="licencia-item">
+              <div>
+                <div class="licencia-tipo">{{ lic.Tipo }}</div>
+                <div class="licencia-desc">{{ lic.Descripcion }}</div>
+              </div>
+              <div class="licencia-precio">${{ "%.2f"|format(lic.Precio) }}</div>
+              <div class="licencia-comprar">
+                <form action="{{ url_for('add_to_cart', beat_id=beat.BeatId, licencia_id=lic.LicenciaId) }}" method="POST">
+                  <button type="submit" class="btn primary">Añadir</button>
+                </form>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+        
+        {% if not licencias and beat.monetizado %}
+           <p>Este beat está monetizado pero no tiene licencias (archivos) disponibles.</p>
+        {% endif %}
+
+      {% endif %}
+      
+      {% if esta_en_carrito %}
+      <div style="margin-top: 20px; text-align: right;">
+        <a href="{{ url_for('cart') }}" class="btn secondary">Ya está en tu carrito (Ver)</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

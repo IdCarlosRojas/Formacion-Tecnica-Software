@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% block title %}Mi Membresía{% endblock %}
+
+{% block content %}
+<style>
+    /* Estilos para el botón de cancelar */
+    .btn-cancelar {
+        background-color: #dc3545;
+        color: white;
+        text-align: center;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+        display: inline-block;
+        margin-top: 15px;
+        width: 100%;
+        font-size: 1em;
+    }
+    .btn-cancelar:hover {
+        background-color: #c82333;
+    }
+</style>
+
+<h1>Gestión de Membresía</h1>
+<p>Revisa tu plan, fecha de vencimiento y realiza pagos.</p>
+
+<section class="membership-details">
+    
+    <div class="plan-card">
+        
+        {% if membresia and membresia.Estado == 'activa' %}
+            <h2>Tu Plan Actual: **{{ membresia.Tipo | upper }}**</h2>
+            <p class="plan-status">Estatus: **ACTIVO** <i class="fas fa-check-circle"></i></p>
+            <p class="plan-expiry">Vence el: **{{ membresia.FechaFin.strftime('%d de %B, %Y') }}**</p>
+            <div class="plan-features">
+                <h4>Beneficios Incluidos:</h4>
+                <ul>
+                    <li><i class="fas fa-check"></i> Acceso 24/7</li>
+                    <li><i class="fas fa-check"></i> Clases Ilimitadas</li>
+                    <li><i class="fas fa-check"></i> 1 Sesión Personal por Mes</li>
+                </ul>
+            </div>
+            <button id="open-payment-modal" class="hero-cta cta-pay-renew">Renovar o Cambiar Plan</button>
+            
+            <form action="{{ url_for('cancelar_membresia') }}" method="POST" onsubmit="return confirm('¿Estás seguro de que quieres cancelar tu plan? Esta acción no se puede deshacer.');">
+                <button type="submit" class="btn-cancelar">Cancelar Plan</button>
+            </form>
+
+        {% else %}
+            <h2>Tu Plan Actual: **NINGUNO**</h2>
+            <p class="plan-status" style="color: #dc3545;">Estatus: 
+                {% if membresia and membresia.Estado == 'cancelada' %}
+                    **CANCELADO** <i class="fas fa-times-circle"></i>
+                {% else %}
+                    **INACTIVO** <i class="fas fa-times-circle"></i>
+                {% endif %}
+            </p>
+            
+            {% if membresia and membresia.FechaFin %}
+                <p class="plan-expiry">Venció el: **{{ membresia.FechaFin.strftime('%d de %B, %Y') }}**</p>
+            {% else %}
+                <p class="plan-expiry">No tienes una membresía registrada.</p>
+            {% endif %}
+            
+            <div class="plan-features">
+                <h4>Beneficios Incluidos:</h4>
+                <ul>
+                    <li style="color: #aaa;"><i class="fas fa-times"></i> Acceso 24/7</li>
+                    <li style="color: #aaa;"><i class="fas fa-times"></i> Clases Ilimitadas</li>
+                    <li style="color: #aaa;"><i class="fas fa-times"></i> 1 Sesión Personal por Mes</li>
+                </ul>
+            </div>
+            <button id="open-payment-modal" class="hero-cta cta-pay-renew">Adquirir un Plan</button>
+            
+        {% endif %}
+    </div>
+
+    <div class="payment-history">
+        <h2>Historial de Pagos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Monto</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pago in pagos %}
+                <tr>
+                    <td>{{ pago.FechaPago.strftime('%d/%m/%Y') }}</td>
+                    <td>${{ "{:,.0f}".format(pago.Monto) }}</td>
+                    <td class="status-paid">{{ pago.Descripcion }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3" style="text-align: center; color: #888;">No hay pagos registrados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<div id="payment-modal" class="modal">
+    <div class="modal-content">
+        <span id="close-payment-modal" class="close-btn">&times;</span>
+        <h3>Renovación y Pago</h3>
+        <p>Selecciona tu plan y método de pago para continuar.</p>
+        
+        <form id="payment-form" class="login-form" method="POST" action="{{ url_for('pagar_membresia') }}">
+            <select name="plan" required>
+                <option value="" disabled selected>-- Selecciona un Plan --</option>
+                <option value="gold">Plan Gold ($150.000/mes)</option>
+                <option value="silver">Plan Silver ($100.000/mes)</option>
+            </select>
+            <input type="text" placeholder="Número de Tarjeta (Simulado)" required> 
+            <input type="text" placeholder="Nombre en la Tarjeta (Simulado)" required>
+            <div class="card-details">
+                <input type="text" placeholder="MM/AA (Simulado)" required>
+                <input type="text" placeholder="CVC (Simulado)" required>
+            </div>
+            <button type="submit" class="cta-login">Pagar y Renovar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Script para el modal de pago
+    document.addEventListener('DOMContentLoaded', () => {
+        const paymentModal = document.getElementById('payment-modal');
+        const openPaymentBtn = document.getElementById('open-payment-modal');
+        const closePaymentBtn = document.getElementById('close-payment-modal');
+        
+        if(openPaymentBtn) {
+            openPaymentBtn.addEventListener('click', () => {
+                if(paymentModal) paymentModal.style.display = 'block';
+            });
+        }
+        if(closePaymentBtn) {
+            closePaymentBtn.addEventListener('click', () => {
+                if(paymentModal) paymentModal.style.display = 'none';
+            });
+        }
+        window.addEventListener('click', (event) => {
+            if (event.target === paymentModal) {
+                paymentModal.style.display = "none";
+            }
+        });
+    });
+</script>
+{% endblock %}

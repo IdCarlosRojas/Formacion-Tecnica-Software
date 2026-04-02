@@ -1,0 +1,49 @@
+{% extends 'base_layout.html' %}
+{% block title %}Crear Nuevo Curso | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <a href="{{ url_for('admin_cursos') }}">&larr; Volver a Cursos</a>
+  <h2>Crear Nuevo Curso</h2>
+  
+  <form action="{{ url_for('admin_new_curso') }}" method="POST" enctype="multipart/form-data">
+    <div class="form-grid">
+      
+      <div class="form-group full-width">
+        <label for="titulo">Título del Curso</label>
+        <input type="text" id="titulo" name="titulo" required>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="descripcion">Descripción</label>
+        <textarea id="descripcion" name="descripcion"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="precio">Precio ($)</label>
+        <input type="number" step="0.01" id="precio" name="precio" required placeholder="Ej: 49.99">
+      </div>
+      
+      <div class="form-group">
+        <label for="categoria">Categoría</label>
+        <input type="text" id="categoria" name="categoria" required placeholder="Ej: Producción, Teoría">
+      </div>
+      
+      <div class="form-group">
+        <label for="instructor">Instructor (Nombre de Usuario)</label>
+        <input type="text" id="instructor" name="instructor" required placeholder="Ej: admin, julianmoreno">
+      </div>
+
+      <div class="form-group">
+        <label for="imagen">Imagen del Curso (PNG, JPG)</label>
+        <input type="file" id="imagen" name="imagen" accept="image/png, image/jpeg" required>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn primary">Crear Curso</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

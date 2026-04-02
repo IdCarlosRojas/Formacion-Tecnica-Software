@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Agregar Producto - DigitalFood{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h2>🍽️ Agregar Producto</h2>
+    <p>Agrega un nuevo producto al menú del restaurante</p>
+</div>
+
+<div class="form-container">
+    <form method="POST" class="product-form" action="{{ url_for('crear_producto') }}">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="nombre">Nombre del Producto:</label>
+                <input type="text" id="nombre" name="nombre" required class="form-input" 
+                       placeholder="Ej: Lomo Saltado">
+            </div>
+            
+            <div class="form-group">
+                <label for="categoria">Categoría:</label>
+                <select id="categoria" name="categoria" required class="form-input">
+                    <option value="">Seleccionar categoría</option>
+                    <option value="entradas">🍤 Entradas</option>
+                    <option value="platos_fuertes">🍖 Platos Fuertes</option>
+                    <option value="bebidas">🥤 Bebidas</option>
+                    <option value="postres">🍰 Postres</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="precio">Precio:</label>
+                <input type="number" id="precio" name="precio" required class="form-input" 
+                       min="0" step="100" placeholder="Ej: 25000">
+            </div>
+            
+            <div class="form-group">
+                <label for="stock">Stock Inicial:</label>
+                <input type="number" id="stock" name="stock" required class="form-input" 
+                       min="0" value="10">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" class="form-input" 
+                      rows="4" placeholder="Describe el producto..."></textarea>
+        </div>
+
+        <!-- He añadido el campo 'estado' que estaba en editar_producto.html para consistencia -->
+        <div class="form-group">
+            <label for="estado">Estado:</label>
+            <select id="estado" name="estado" required class="form-input">
+                <option value="disponible" selected>🟢 Disponible</option>
+                <option value="agotado">🔴 Agotado</option>
+            </select>
+        </div>
+        
+        <!-- ===== SECCIÓN ACTUALIZADA ===== -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">➕ Agregar Producto</button>
+            <!-- Texto del botón actualizado -->
+            <a href="{{ url_for('listar_productos') }}" class="btn btn-outline">↩️ Volver a Productos</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

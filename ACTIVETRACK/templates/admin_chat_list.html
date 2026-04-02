@@ -1,0 +1,22 @@
+{% extends "admin_base_custom.html" %}
+{% block title %}Chat de Admin{% endblock %}
+
+{% block content %}
+<h1>Chat de Administrador</h1>
+<p>Selecciona un usuario para ver el historial de chat o enviar un mensaje.</p>
+
+<div class.="admin-user-list" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+    
+    {% for user in users %}
+    <div style="padding: 15px 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <strong style="font-size: 1.1em; color: #333;">{{ user.Nombre }}</strong><br>
+            <small style="color: #777;">{{ user.Correo }}</small>
+        </div>
+        <a href="{{ url_for('admin_chat_view', user_id=user.UsuarioId) }}" class="cta-small">Ver Chat</a>
+    </div>
+    {% else %}
+    <p>No hay usuarios (regulares) registrados.</p>
+    {% endfor %}
+</div>
+{% endblock %}

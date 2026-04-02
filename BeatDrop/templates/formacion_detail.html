@@ -1,0 +1,29 @@
+{% extends 'base_layout.html' %}
+{% block title %}{{ curso.Titulo }} | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+
+<header class="curso-detail-header" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ url_for('static', filename=curso.ImagenUrl) }}');">
+  <h1>{{ curso.Titulo }}</h1>
+  <p class="meta" style="font-size: 1.2em; color: #eee;">Por: {{ curso.Instructor }}</p>
+</header>
+
+<div class="curso-detail-body">
+  <div class="curso-descripcion">
+    <h3>Descripción del Curso</h3>
+    <p>{{ curso.Descripcion }}</p>
+  </div>
+  
+  <div class="curso-compra" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+    {% if ya_comprado %}
+      <a href="#" class="btn primary full" style="background: var(--green); cursor: default;">¡Ya estás inscrito!</a>
+    {% else %}
+      <h3>Precio: <span class="curso-precio" style="font-size: 1.5em;">${{ "%.2f"|format(curso.Precio) }}</span></h3>
+      <form action="{{ url_for('comprar_formacion', curso_id=curso.CursoId) }}" method="POST">
+        <button type="submit" class="btn primary full">Inscribirse Ahora</button>
+      </form>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

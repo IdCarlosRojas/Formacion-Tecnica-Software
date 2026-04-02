@@ -1,0 +1,30 @@
+{% extends "Base.html" %}
+{% block title %}Solicitar Cita{% endblock %}
+
+{% block content %}
+<div class="form-container" style="max-width: 600px;">
+  <form action="{{ url_for('crear_cita') }}" method="POST">
+    <h2 style="text-align: center;">Solicitar Cita con {{ tatuador.nombre }}</h2>
+    
+    <input type="hidden" name="tatuador_id" value="{{ tatuador.id }}">
+    
+    <div class="form-group">
+      <label for="fecha">Fecha Deseada</label>
+      <input type="date" id="fecha" name="fecha" required>
+    </div>
+    
+    <div class="form-group">
+      <label for="hora">Hora Deseada</label>
+      <input type="time" id="hora" name="hora" required>
+    </div>
+
+    <div class="form-group">
+      <label for="descripcion">Describe tu idea (Tamaño, zona del cuerpo, estilo)</label>
+      <textarea id="descripcion" name="descripcion" rows="5" placeholder="Ej: Un tigre realista en el antebrazo, 15cm aprox..."></textarea>
+    </div>
+    
+    <button type="submit" class="btn btn-primary btn-full">Enviar Solicitud</button>
+    <a href="{{ url_for('perfil_tatuador', id=tatuador.id) }}" style="color: var(--color-text-muted); text-align: center; display: block; margin-top: 1rem;">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

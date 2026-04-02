@@ -1,0 +1,51 @@
+{% extends 'base_layout.html' %}
+{% block title %}Panel de Admin | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+<h2>Panel de Administración</h2>
+<p class="section-desc">Gestiona los recursos de BeatDrop.</p>
+
+<div class="admin-menu">
+  <div class="admin-card">
+    <h3>Gestionar Usuarios</h3>
+    <p>Ver, editar o eliminar usuarios de la plataforma.</p>
+    <a href="{{ url_for('admin_users') }}" class="btn secondary">Ir a Usuarios</a>
+  </div>
+  
+  <div class="admin-card">
+    <h3>Gestionar Beats</h3>
+    <p>Moderar, editar o eliminar beats subidos.</p>
+    <a href="{{ url_for('admin_beats') }}" class="btn secondary">Ir a Beats</a>
+  </div>
+
+  <div class="admin-card">
+    <h3>Gestionar Cursos</h3>
+    <p>Crear, editar o eliminar cursos de formación.</p>
+    <a href="{{ url_for('admin_cursos') }}" class="btn secondary">Ir a Cursos</a>
+  </div>
+  
+  <div class="admin-card">
+    <h3>Gestionar Samples</h3>
+    <p>Moderar o eliminar samples subidos.</p>
+    <a href="{{ url_for('admin_samples') }}" class="btn secondary">Ir a Samples</a>
+  </div>
+  </div>
+
+<style>
+  .admin-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  .admin-card {
+    background: #fafafa;
+    border: 1px solid #eee;
+    padding: 20px;
+    border-radius: var(--card-radius);
+  }
+  .admin-card.disabled {
+    opacity: 0.6;
+  }
+</style>
+{% endblock %}

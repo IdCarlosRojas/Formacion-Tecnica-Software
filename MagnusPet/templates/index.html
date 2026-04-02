@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Magnus.Pet</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="header">
+    <div class="logo">Magnus.<span>Pet</span></div>
+    <nav>
+      <button class="nav-btn active" data-route="home">Inicio</button>
+      <button class="nav-btn" data-route="catalog">Categorías</button>
+      <button class="nav-btn" data-route="mascotas">Mascotas</button>
+      <button class="nav-btn" data-route="citas">Citas</button>
+      <button class="nav-btn" data-route="about">Nosotros</button>
+      <button class="nav-btn" data-route="profile">Perfil</button>
+    </nav>
+    <div id="user-actions">
+      <button id="cart-btn" class="btn small ghost hidden" title="Carrito">
+        🛒 <span id="cart-count">(0)</span>
+      </button>
+      <button id="notif-btn" class="btn small ghost hidden" title="Notificaciones">
+        🔔 <span id="notif-count">(0)</span>
+      </button>
+      <button id="open-login" class="btn small">Iniciar sesión</button>
+      <button id="logout-btn" class="btn small hidden">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <section id="home" class="page">
+    <div class="hero">
+      <h1>Bienvenido a <span>Magnus.Pet</span></h1>
+      <p>Todo lo que tu mascota necesita, en un solo lugar.</p>
+      <div class="hero-btns">
+         <button class="btn" data-route="catalog">Ver Catálogo</button>
+         <button class="btn ghost" data-route="citas">Agendar Cita</button>
+      </div>
+    </div>
+    <div class="page-container">
+      <div class="about-summary">
+        <h2>Una Solución Digital para un Cuidado Integral</h2>
+        <div class="about-columns">
+          <div class="column">
+            <h3>El Desafío</h3>
+            <p>Identificamos que la gestión manual de citas, la visibilidad digital limitada y la comunicación no centralizada eran desafíos clave para Magnus.Pet. Esta dependencia de procesos manuales podía ralentizar la atención y limitar el acceso a la información.</p>
+          </div>
+          <div class="column">
+            <h3>Nuestra Solución</h3>
+            <p>Como parte de nuestro proyecto de formación con el SENA, desarrollamos esta plataforma digital para modernizar la clínica. El objetivo es optimizar la gestión interna y, lo más importante, mejorar tu experiencia como cliente.</p>
+          </div>
+          <div class="column">
+            <h3>Tu Beneficio</h3>
+            <p>Con esta herramienta, buscamos ofrecerte una atención más rápida, precisa y personalizada. Ahora puedes gestionar tus citas, acceder al historial de tu mascota y explorar nuestro catálogo de productos de forma ágil, segura e intuitiva.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="catalog" class="page hidden">
+    <h2>Catálogo de productos</h2>
+    <div class="categories"></div>
+    <div id="product-list" class="product-list"></div>
+  </section>
+
+  <section id="mascotas" class="page hidden">
+    <h2>Mis Mascotas</h2>
+    <div class="profile-layout">
+      <div class="profile-card">
+        <h3>Registrar nueva mascota</h3>
+        <form id="mascota-form">
+          <input id="mascota-nombre" type="text" placeholder="Nombre de la mascota" required>
+          <input id="mascota-especie" type="text" placeholder="Especie (Ej: Perro, Gato)" required>
+          <input id="mascota-raza" type="text" placeholder="Raza">
+          <input id="mascota-edad" type="number" placeholder="Edad (años)">
+          <input id="mascota-genero" type="text" placeholder="Género (Macho/Hembra)">
+          <button class="btn" type="submit">Guardar Mascota</button>
+          <div id="mascota-msg" class="msg"></div>
+        </form>
+      </div>
+      <div class="profile-card history-card">
+        <h3>Mascotas registradas</h3>
+        <div id="mascotas-list" class="mascotas-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="citas" class="page hidden">
+    <h2>Mis Citas</h2>
+    <div class="profile-layout">
+      <div class="profile-card">
+        <h3>Solicitar nueva cita</h3>
+        <form id="cita-form">
+          <label for="cita-mascota">Mascota:</label>
+          <select id="cita-mascota" required>
+            <option value="">Selecciona una mascota...</option>
+          </select>
+          <label for="cita-veterinario">Veterinario (Opcional):</label>
+          <select id="cita-veterinario">
+            <option value="">Selecciona un veterinario...</option>
+          </select>
+          <label for="cita-fecha">Fecha:</label>
+          <input id="cita-fecha" type="date" required>
+          <label for="cita-hora">Hora:</label>
+          <input id="cita-hora" type="time" required>
+          <label for="cita-motivo">Motivo:</label>
+          <input id="cita-motivo" type="text" placeholder="Ej: Vacunación, Chequeo" required>
+          <button class="btn" type="submit">Enviar Solicitud</button>
+          <div id="cita-msg" class="msg"></div>
+        </form>
+      </div>
+      <div class="profile-card history-card">
+        <h3>Mis Citas</h3>
+        <div id="citas-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="profile" class="page hidden">
+    <h2>Tu perfil</h2>
+    <div id="profile-area" class="profile-layout">
+      <form id="profile-form" class="profile-card">
+        <h3>Datos personales</h3>
+        <label for="profile-name">Nombre:</label>
+        <input type="text" id="profile-name" placeholder="Tu nombre completo">
+        <label for="profile-email">Correo:</label>
+        <input type="email" id="profile-email" placeholder="Tu correo" disabled>
+        <label for="profile-phone">Teléfono:</label>
+        <input type="tel" id="profile-phone" placeholder="Tu teléfono">
+        <button class="btn" type="submit">Guardar Cambios</button>
+        <div id="profile-msg" class="msg"></div>
+      </form>
+      <div class="profile-card">
+        <h3>Saldo y monedas (Simulado)</h3>
+        <p><strong>Wallet:</strong> $<span id="profile-wallet"></span></p>
+        <p><strong>Coins:</strong> <span id="profile-coins"></span></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="page hidden">
+    <div class="page-container">
+      <h2>Sobre nosotros</h2>
+      <p class="about-intro">Somos <strong>Magnus.Pet</strong>, una tienda y clínica veterinaria integral dedicada al bienestar animal, comprometida con ofrecer un servicio excepcional y productos de la más alta calidad para tus compañeros de vida.</p>
+      
+      <div class="about-grid">
+        <div class="about-card">
+          <div class="card-icon">🐾</div>
+          <h3>Nuestra Misión</h3>
+          <p>Desarrollar una aplicación web y móvil innovadora para la clínica, optimizando la gestión de citas, el historial clínico y la venta de productos, para así mejorar la calidad del servicio y la experiencia de nuestros clientes y sus mascotas.</p>
+        </div>
+        <div class="about-card">
+          <div class="card-icon">💖</div>
+          <h3>Nuestra Visión</h3>
+          <p>Convertir a la clínica veterinaria Magnus.Pet en un referente de excelencia y modernidad en el cuidado animal, siendo reconocidos por nuestra innovación tecnológica, la calidad de nuestra atención y nuestro compromiso con la comunidad.</p>
+        </div>
+        <div class="about-card">
+          <div class="card-icon">🐕‍🦺</div>
+          <h3>Nuestros Servicios</h3>
+          <ul>
+            <li>Consultas veterinarias generales y de especialidad.</li>
+            <li>Planes de vacunación y desparasitación.</li>
+            <li>Cirugías y procedimientos hospitalarios.</li>
+            <li>Peluquería y spa canino y felino.</li>
+            <li>Venta de alimentos premium y medicados.</li>
+            <li>Amplio catálogo de accesorios, juguetes y medicinas.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="purpose-section">
+        <h3>Nuestro Propósito: Tecnología y Bienestar</h3>
+        <p>Este proyecto responde a la necesidad de optimizar la gestión de la clínica, reducir los tiempos de espera y centralizar la información. Con esta plataforma, buscamos ofrecerte una herramienta intuitiva para el manejo integral de la salud de tu mascota.</p>
+      </div>
+      
+      <div class="team-section">
+        <h3>Un Proyecto de Formación SENA</h3>
+        <p>Esta plataforma fue desarrollada con orgullo por los aprendices del SENA, aplicando metodologías ágiles y tecnologías modernas para crear una solución real a un desafío del sector veterinario.</p>
+        <ul>
+          <li>ARDILLA CORDOBA EDUARD ANDRES</li>
+          <li>GARZON CONTRERAS LUIS ALEJANDRO</li>
+          <li>TELLEZ RODRIGUEZ LAURA SOFIA</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <div id="auth-modal" class="modal hidden">
+    <div class="modal-content">
+      <button id="modal-close" class="modal-close">&times;</button>
+      <div class="tabs">
+        <button id="tab-login" class="active">Iniciar sesión</button>
+        <button id="tab-register">Registrarse</button>
+      </div>
+      <form id="login-form">
+        <input id="login-identifier" type="text" placeholder="Correo electrónico" required>
+        <input id="login-password" type="password" placeholder="Contraseña" required>
+        <button class="btn" type="submit">Entrar</button>
+        <div id="login-msg" class="msg"></div>
+        <button type="button" id="btn-login-admin" class="btn ghost" style="width:100%; margin-top: 10px;">Acceso Admin (Demo)</button>
+      </form>
+      <form id="register-form" class="hidden">
+        <input id="reg-name" type="text" placeholder="Nombre" required>
+        <input id="reg-lastname" type="text" placeholder="Apellido">
+        <input id="reg-email" type="email" placeholder="Correo electrónico" required>
+        <input id="reg-phone" type="tel" placeholder="Teléfono">
+        <input id="reg-password" type="password" placeholder="Contraseña" required>
+        <div class="terms-check">
+          <input type="checkbox" id="reg-terms" required>
+          <label for="reg-terms">Acepto los <a href="#" id="open-terms">Términos y Condiciones</a> y la <a href="#" id="open-policy">Política de Privacidad</a>.</label>
+        </div>
+        <button class="btn" type="submit">Crear cuenta</button>
+        <div id="reg-msg" class="msg"></div>
+      </form>
+    </div>
+  </div>
+  
+  <div id="notif-modal" class="modal hidden">
+    <div class="modal-content">
+      <button id="notif-close" class="modal-close">&times;</button>
+      <h3>Notificaciones</h3>
+      <div id="notif-list"></div>
+    </div>
+  </div>
+
+  <div id="historial-modal" class="modal hidden">
+    <div class="modal-content" style="max-width: 600px;">
+      <button id="historial-close" class="modal-close">&times;</button>
+      <h3>Historial Clínico de <span id="historial-mascota-nombre"></span></h3>
+      <h4>Diagnóstico General</h4>
+      <p id="historial-diagnostico"></p>
+      <h4>Tratamiento</h4>
+      <p id="historial-tratamiento"></p>
+      <h4>Carnet de Vacunas</h4>
+      <table id="vacunas-table">
+        <thead>
+          <tr><th>Vacuna</th><th>Fecha Aplicación</th><th>Próxima Dosis</th></tr>
+        </thead>
+        <tbody id="vacunas-list"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="cart-modal" class="modal hidden">
+    <div class="modal-content" style="max-width: 600px;">
+      <button id="cart-close" class="modal-close">&times;</button>
+      <h3>Tu Carrito</h3>
+      <div id="cart-items-list">
+        </div>
+      <div class="cart-summary">
+        <strong>Total: $<span id="cart-total">0</span></strong>
+        <button id="cart-checkout-btn" class="btn">Finalizar Compra</button>
+      </div>
+      <div id="cart-msg" class="msg"></div>
+    </div>
+  </div>
+
+  <div id="terms-modal" class="modal hidden">
+    <div class="modal-content" style="max-width: 800px; max-height: 80vh; overflow-y: auto;">
+      <button id="terms-close" class="modal-close">&times;</button>
+      <h3>Términos y Condiciones</h3>
+      <p>Bienvenido a Magnus.Pet. Al usar esta plataforma, usted acepta los siguientes términos. Esta es una aplicación de demostración desarrollada como parte de un proyecto de formación del SENA. No procesa pagos reales ni ofrece servicios veterinarios reales.</p>
+      <ol>
+        <li><strong>Aceptación de Términos:</strong> Al crear una cuenta o usar este sitio, usted acepta estar sujeto a estos Términos y Condiciones.</li>
+        <li><strong>Naturaleza del Proyecto:</strong> Esta plataforma es un proyecto académico. Los datos ingresados son para fines de demostración y pueden ser borrados. La información de productos y servicios es ficticia.</li>
+        <li><strong>Uso de la Cuenta:</strong> Usted es responsable de mantener la confidencialidad de su contraseña. Acepta la responsabilidad de todas las actividades que ocurran bajo su cuenta.</li>
+        <li><strong>Servicios:</strong> Las funciones de agendamiento de citas, compra de productos y gestión de historial clínico son simulaciones. Ninguna cita será agendada y ningún producto será enviado.</li>
+        <li><strong>Limitación de Responsabilidad:</strong> Los desarrolladores y el SENA no se hacen responsables de ninguna pérdida de datos o malentendido que surja del uso de esta plataforma de demostración.</li>
+        <li><strong>Ley Aplicable:</strong> Estos términos se regirán por las leyes de la República de Colombia.</li>
+      </ol>
+      <h3 style="margin-top: 30px;">Política de Privacidad y Tratamiento de Datos (Habeas Data)</h3>
+      <p>De conformidad con la Ley 1581 de 2012 de Colombia, informamos:</p>
+      <ul>
+        <li><strong>Responsable del Tratamiento:</strong> Los desarrolladores del proyecto SENA.</li>
+        <li><strong>Finalidad del Tratamiento:</strong> Los datos personales (nombre, correo, teléfono) recolectados serán usados únicamente para los siguientes fines de simulación:
+          <ul>
+            <li>Gestionar su cuenta de usuario de demostración.</li>
+            <li>Simular el agendamiento, modificación y cancelación de citas.</li>
+            <li>Simular la creación de perfiles de mascotas e historiales clínicos.</li>
+            <li>Generar notificaciones de prueba dentro de la aplicación.</li>
+          </ul>
+        </li>
+        <li><strong>Derechos del Titular:</strong> Como titular de la información, tiene derecho a conocer, actualizar, rectificar y suprimir sus datos personales. Sin embargo, dado que es un proyecto de demostración, la persistencia de los datos no está garantizada.</li>
+        <li><strong>Seguridad:</strong> Se han implementado medidas de seguridad básicas, como el hash de contraseñas, pero no se recomienda usar datos personales reales.</li>
+        <li><strong>Vigencia:</strong> Los datos serán tratados durante el tiempo que dure la evaluación y demostración del proyecto.</li>
+      </ul>
+      <p>Al aceptar, usted otorga su consentimiento explícito para que sus datos (ficticios o reales) sean tratados con los fines de demostración aquí descritos.</p>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

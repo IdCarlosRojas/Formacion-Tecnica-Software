@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block title %}Detalle de Rutina{% endblock %}
+
+{% block content %}
+<style>
+    /* (Estilos sin cambios) */
+    .rutina-detalle-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+    }
+    .ejercicios-col h2, .form-col h3 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+    }
+    .form-col .visualization-card {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        position: sticky; 
+        top: 75px; 
+    }
+    .exercise-in-routine {
+        background: white;
+        padding: 20px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        border-left: 5px solid #ffa500;
+    }
+    .exercise-in-routine h4 { margin: 0 0 15px 0; font-size: 1.2em; }
+    .sets-list { list-style: none; padding-left: 0; margin: 15px 0; }
+    .sets-list li { 
+        padding: 8px 10px; 
+        background: #f9f9f9; 
+        margin-bottom: 5px; 
+        border-radius: 4px; 
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .form-inline { 
+        display: flex; 
+        gap: 10px; 
+        margin-top: 15px; 
+        padding-top: 15px;
+        border-top: 1px dashed #eee;
+    }
+    .form-inline input { 
+        width: 80px; 
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .select2-container { width: 100% !important; }
+
+    /* Estilos para el <optgroup> de Select2 */
+    .select2-container--default .select2-results__group {
+        color: #fff;
+        background-color: #ffa500;
+        font-weight: bold;
+        padding: 6px 10px;
+    }
+
+    @media (max-width: 950px) {
+        .rutina-detalle-grid { grid-template-columns: 1fr; }
+        .form-col .visualization-card { position: static; }
+    }
+
+</style>
+
+<a href="{{ url_for('rutinas') }}" style="text-decoration: none; color: #007bff; font-weight: 500; margin-bottom: 15px; display: inline-block;">&lt; Volver a Mis Rutinas</a>
+<h1>Editando: {{ rutina.Nombre }}</h1>
+<p>Añade ejercicios de la lista y define tus series (sets) planeadas.</p>
+
+<div class="rutina-detalle-grid">
+    
+    <div class="ejercicios-col">
+        <h2>Ejercicios en esta Rutina</h2>
+        {% for re in ejercicios_en_rutina %}
+        <div class="exercise-in-routine">
+            <h4>{{ re.ejercicio.Nombre }} ({{ re.ejercicio.GrupoMuscular }})</h4>
+            <ul class="sets-list">
+                {% for set in re.sets_planeados %}
+                <li>
+                    <span>Set {{ set.SeriesNum }}: <strong>{{ set.Peso }} kg</strong> x <strong>{{ set.Reps }} reps</strong></span>
+                </li>
+                {% else %}
+                <small>No hay sets planeados.</small>
+                {% endfor %}
+            </ul>
+            <form action="{{ url_for('add_set_a_ejercicio', re_id=re.RutinaEjercicioId) }}" method="POST" class="form-inline">
+                <input type="number" step="0.5" name="peso" placeholder="kg" required>
+                <input type="number" name="reps" placeholder="Reps" required>
+                <button type="submit" class="cta-small" style="background-color: #5cb85c; border: none; color: white;">+ Agregar Serie</button>
+            </form>
+        </div>
+        {% else %}
+        <div class="stat-card" style="text-align: center; padding: 30px; background: #fafafa;">
+            <p>No hay ejercicios en esta rutina. ¡Añade uno desde el panel de la derecha!</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="form-col">
+        <div class="visualization-card">
+            <h3>Añadir Ejercicio a la Rutina</h3>
+            <form action="{{ url_for('add_ejercicio_a_rutina', rutina_id=rutina.RutinaId) }}" method="POST" class="login-form">
+                
+                <label for="select_ejercicio" style="font-weight: 600; margin-bottom: 5px; display: block;">Buscar Ejercicio</label>
+                
+                <select id="select_ejercicio" name="ejercicio_id" required>
+                    <option value="" disabled selected>-- Escribe para buscar... --</option>
+                    
+                    {% for group_name, exercises in ejercicios_agrupados.items() %}
+                        <optgroup label="{{ group_name }}">
+                            {% for ej in exercises %}
+                                <option value="{{ ej.EjercicioId }}">{{ ej.Nombre }}</option>
+                            {% endfor %}
+                        </optgroup>
+                    {% endfor %}
+                </select>
+                
+                <button type="submit" class="cta-login" style="margin-top: 15px;">Añadir Ejercicio</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Inicializar Select2 en el dropdown
+    $(document).ready(function() {
+        $('#select_ejercicio').select2({
+            placeholder: "Escribe para buscar un ejercicio...",
+            allowClear: true
+        });
+    });
+</script>
+{% endblock %}

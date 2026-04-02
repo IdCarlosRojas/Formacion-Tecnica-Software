@@ -1,0 +1,34 @@
+{% extends 'base_layout.html' %}
+{% block title %}Guardados | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+<section class="guardados-section">
+  <h2>Mis Guardados</h2>
+  <p class="section-desc">Aquí encontrarás todos los beats y proyectos que has guardado.</p>
+  <div class="beats-grid">
+    {% for beat in beats %}
+    <article class="beat-card">
+      <a href="{{ url_for('beat_detail', beat_id=beat.BeatId) }}" class="cover-link" style="background-image: url('{{ beat.cover_url }}');"></a>
+      <div class="beat-info">
+        <h3><a href="{{ url_for('beat_detail', beat_id=beat.BeatId) }}">{{ beat.Nombre }}</a></h3>
+        <p class="meta">{{ beat.artista_ref.NombreUsuario }} • {{ beat.Genero }} / {{ beat.FechaSubida.year }}</p>
+        
+        <div class="card-actions">
+          <span class="meta">Desde ${{ "%.2f"|format(beat.precio_base) }}</span>
+          <form action="{{ url_for('toggle_favorito', beat_id=beat.BeatId) }}" method="POST" style="display: inline;">
+            <button type="submit" class="save-btn {% if beat.BeatId in favoritos_ids %}saved{% endif %}" title="Quitar de Guardados">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </article>
+    {% else %}
+    <p>No tienes ningún beat guardado.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "Base.html" %}
+{% block title %}Buscar Tatuadores{% endblock %}
+
+{% block content %}
+<h2>Resultados de Búsqueda</h2>
+
+<div class="search-bar">
+  <form action="{{ url_for('buscar') }}" method="GET">
+    <div class="form-group">
+      <label for="q">Estilo</label>
+      <input type="text" id="q" name="q" value="{{ query_especialidad or '' }}" placeholder="Ej: Realismo...">
+    </div>
+    <div class="form-group">
+      <label for="loc">Ubicación</label>
+      <input type="text" id="loc" name="loc" value="{{ query_ubicacion or '' }}" placeholder="Ej: Chapinero...">
+    </div>
+    <button type="submit" class="btn btn-primary">Buscar</button>
+  </form>
+</div>
+
+<h3>Mapa de Artistas</h3>
+<div id="map"></div>
+
+<hr style="margin: 3rem 0; border-color: rgba(255,255,255,0.1);">
+
+<h2>Lista de Artistas ({{ tatuadores | length }})</h2>
+<div class="search-results-grid">
+  {% if tatuadores %}
+    {% for perfil in tatuadores %}
+      <div class="card">
+        <h3>{{ perfil.usuario.nombre }}</h3>
+        <p style="color: var(--color-text-muted);">{{ perfil.especialidades or 'Artista' }}</p>
+        <p style="font-weight: 600;">📍 {{ perfil.ubicacion or 'Sin ubicación' }}</p>
+        <a href="{{ url_for('perfil_tatuador', id=perfil.usuarioId) }}" style="margin-top: auto;">Ver Perfil &rarr;</a>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p style="color: var(--color-text-muted);">No se encontraron artistas con esos criterios. Intenta una búsqueda más amplia.</p>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const mapData = {{ map_data|safe }};
+  const map = L.map('map').setView([4.6097, -74.0817], 12); // Centrado en Bogotá
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 20
+  }).addTo(map);
+
+  if (mapData.length > 0) {
+    let bounds = [];
+    mapData.forEach(tatuador => {
+      const marker = L.marker([tatuador.lat, tatuador.lon]).addTo(map);
+      marker.bindPopup(`
+        <strong style="font-size: 1.1rem; color: #1a1a1a;">${tatuador.nombre}</strong><br>
+        ${tatuador.especialidades}<br>
+        <a href="${tatuador.url}" style="color: #007bff; font-weight: 600;" target="_blank">Ver Perfil</a>
+      `);
+      bounds.push([tatuador.lat, tatuador.lon]);
+    });
+    if (bounds.length > 0) {
+      map.fitBounds(bounds, { padding: [50, 50] });
+    }
+  }
+</script>
+{% endblock %}

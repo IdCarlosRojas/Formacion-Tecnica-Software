@@ -1,0 +1,96 @@
+{% extends 'base_layout.html' %}
+{% block title %}Gestionar Samples | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('admin_dashboard') }}">&larr; Volver al Panel</a>
+<div style="display: flex; justify-content: space-between; align-items: center;">
+    <h2>Gestionar Samples</h2>
+    <a href="{{ url_for('admin_new_sample') }}" class="btn primary">Crear Nuevo Sample</a>
+</div>
+<p class="section-desc">Total: {{ samples|length }} samples subidos.</p>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Artista</th>
+      <th>Tipo Licencia</th>
+      <th>DNDA</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for sample in samples %}
+    <tr>
+      <td>{{ sample.SampleId }}</td>
+      <td>{{ sample.Nombre }}</td>
+      <td>@{{ sample.artista_ref.NombreUsuario }}</td>
+      <td>
+        {% set licencia = sample.licencias.first() %}
+        {% if licencia %}
+          {% if licencia.Tipo == 'Gratuita' %}
+            <span style="color: var(--green);">Gratuita</span>
+          {% else %}
+            <span style="color: var(--accent-dark);">{{ licencia.porcentaje_regalias }}% Regalías</span>
+          {% endif %}
+        {% else %}
+          <span style="color: var(--muted);">Sin licencia</span>
+        {% endif %}
+      </td>
+      <td>{{ sample.dnda_registro or 'N/A' }}</td>
+      <td class="admin-actions">
+        <a href="{{ url_for('admin_edit_sample', sample_id=sample.SampleId) }}" class="btn-edit-admin">Editar</a>
+        <form action="{{ url_for('admin_delete_sample', sample_id=sample.SampleId) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de que quieres ELIMINAR este sample? Esta acción borrará sus archivos y contratos asociados.');">
+          <button type="submit" class="btn-danger-admin">
+            Eliminar
+          </button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<style>
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  .admin-table th, .admin-table td {
+    padding: 12px;
+    border: 1px solid #eee;
+    text-align: left;
+    vertical-align: middle;
+  }
+  .admin-table th {
+    background: #f9f9f9;
+  }
+  .admin-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .btn-edit-admin {
+    background: #cce5ff;
+    color: #004085;
+    border: 1px solid #b8daff;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .btn-danger-admin {
+    background: #f8d7da;
+    color: var(--red);
+    border: 1px solid var(--red);
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+</style>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "Base.html" %}
+{% block title %}{{ tatuador.nombre }}{% endblock %}
+
+{% block content %}
+  <div class="card" style="margin-bottom: 2rem; background: var(--color-surface);">
+    <h1>{{ tatuador.nombre }}</h1>
+    
+    <div class="star-rating">
+      {% if avg_rating > 0 %}
+        <span>⭐</span>
+        <span class="avg">{{ avg_rating }}</span>
+        <span class="total"> ({{ resenas | length }} reseñas)</span>
+      {% else %}
+        <span class="total">Aún no tiene reseñas</span>
+      {% endif %}
+    </div>
+
+    {% if perfil %}
+      <h3 style="color: var(--color-text); font-weight: 500; margin-top: 1rem; font-family: var(--font-body); font-size: 1.5rem;">{{ perfil.especialidades or 'Artista verificado' }}</h3>
+      <p style="margin-top: 1rem; color: var(--color-text-muted);">{{ perfil.descripcion or 'Sin descripción.' }}</p>
+      
+      <div style="margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 2.5rem;">
+        <div>
+          <strong>📍 Ubicación:</strong>
+          <p>{{ perfil.ubicacion or 'No especificada' }}</p>
+        </div>
+        <div>
+          <strong>💰 Tarifas:</strong>
+          <p>{{ perfil.tarifas or 'Consultar' }}</p>
+        </div>
+        <div>
+          <strong>📱 Redes:</strong>
+          <p>{{ perfil.redesSociales or 'No publicadas' }}</p>
+        </div>
+      </div>
+    {% else %}
+      <p>Este artista aún no ha configurado su perfil.</p>
+    {% endif %}
+    
+    <a href="{{ url_for('solicitar_cita', tatuador_id=tatuador.id) }}" class="btn btn-primary" style="margin-top: 1.5rem; align-self: flex-start;">Solicitar Cita</a>
+  </div>
+
+  <h2>Portafolio de Trabajos</h2>
+  <div class="portfolio-gallery">
+    {% if portafolios %}
+      {% for item in portafolios %}
+        <div class="portfolio-item card" style="background: var(--color-surface);">
+          {% if item.imagenes %}
+            <img src="{{ url_for('uploaded_file', filename=item.imagenes[0].rutaImagen) }}" alt="{{ item.titulo }}">
+          {% endif %}
+          <h4 style="margin-top: 1rem;">{{ item.titulo }}</h4>
+          <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: auto;">{{ item.descripcion or '' }}</p>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p style="color: var(--color-text-muted);">Este artista aún no ha subido trabajos a su portafolio.</p>
+    {% endif %}
+  </div>
+
+  <div class="review-section">
+    <h2>Reseñas de Clientes ({{ resenas | length }})</h2>
+    {% if resenas %}
+      {% for r in resenas %}
+      <div class="review-card">
+        <div class="star-rating">
+          {% for i in range(r.calificacion) %}<span>⭐</span>{% endfor %}
+        </div>
+        <p>"{{ r.comentario or 'Sin comentario.' }}"</p>
+        <div class="review-card-footer">
+          - {{ r.cita.cliente.nombre }} | {{ r.fecha.split('T')[0] }}
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p style="color: var(--color-text-muted);">Este artista aún no tiene reseñas públicas.</p>
+    {% endif %}
+  </div>
+
+{% endblock %}

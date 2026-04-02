@@ -1,0 +1,43 @@
+{% extends "Base.html" %}
+{% block title %}Panel de Admin{% endblock %}
+
+{% block content %}
+<h2>Panel de Administrador</h2>
+<p>Bienvenido, <strong>{{ session.nombre }}</strong>. Gestiona toda la plataforma desde aquí.</p>
+
+<h3>Estadísticas del Sitio</h3>
+<div class="dashboard-grid">
+  <div class="card stat-card">
+    <h2>{{ total_usuarios }}</h2>
+    <p>Usuarios Totales</p>
+  </div>
+  <div class="card stat-card">
+    <h2>{{ total_tatuadores }}</h2>
+    <p>Tatuadores Registrados</p>
+  </div>
+  <div class="card stat-card">
+    <h2>{{ total_citas }}</h2>
+    <p>Citas Agendadas</p>
+  </div>
+  <div class="card stat-card">
+    <h2>{{ total_resenas }}</h2>
+    <p>Reseñas Recibidas</p>
+  </div>
+</div>
+
+<hr style="margin: 3rem 0; border-color: rgba(250, 208, 46, 0.2);">
+
+<h2>Herramientas de Gestión</h2>
+<div class="dashboard-grid" style="grid-template-columns: 1fr 1fr;">
+  <div class="card">
+    <h3>Gestionar Usuarios</h3>
+    <p>Ver todos los usuarios, cambiar roles (cliente, tatuador, admin) y administrar perfiles.</p>
+    <a href="{{ url_for('gestionar_usuarios') }}" class="btn btn-primary" style="margin-top: auto;">Gestionar Usuarios</a>
+  </div>
+  <div class="card">
+    <h3>Gestionar Citas</h3>
+    <p>Ver un historial completo de todas las citas agendadas en el sistema (pendientes, aprobadas, etc.).</p>
+    <a href="{{ url_for('gestionar_citas_admin') }}" class="btn btn-primary" style="margin-top: auto;">Ver Todas las Citas</a>
+  </div>
+</div>
+{% endblock %}

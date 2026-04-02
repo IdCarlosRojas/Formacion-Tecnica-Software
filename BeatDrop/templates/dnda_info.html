@@ -1,0 +1,98 @@
+{% extends 'base_layout.html' %}
+{% block title %}Guía de Registro DNDA | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+<style>
+  .guia-dnda h2 {
+    color: var(--accent-dark);
+    margin-bottom: 15px;
+  }
+  .guia-dnda h3 {
+    margin-top: 30px;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+  }
+  .guia-dnda p, .guia-dnda li {
+    font-size: 1.1em;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .guia-dnda li {
+    margin-bottom: 10px;
+  }
+  .guia-dnda strong {
+    color: var(--text);
+  }
+  .guia-dnda code {
+    background: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #333;
+  }
+</style>
+
+<div class="guia-dnda">
+  <a href="{{ url_for('subir_beat') }}">&larr; Volver a Subir Beat</a>
+  <h2>Guía: Cómo Registrar tu Obra en la DNDA (Colombia)</h2>
+  
+  <p>El <strong>Registro Nacional de Derecho de Autor (DNDA)</strong> es la entidad del Ministerio del Interior de Colombia que te permite obtener un certificado con valor jurídico que demuestra que tú eres el creador de tu obra (beat, sample o canción).</p>
+  <p>Este es un paso opcional pero muy recomendado para proteger legalmente tu música. Aquí te mostramos cómo hacerlo.</p>
+
+  <h3>🔹 Paso 1: Entrar al portal de registro</h3>
+  <p>
+    Entra al sitio web oficial de la DNDA en:
+    <a href="https://www.derechodeautor.gov.co" target="_blank">https://www.derechodeautor.gov.co</a>
+  </p>
+  <p>
+    Haz clic en la opción “Registro Nacional de Derecho de Autor” o entra directamente al portal de registro en:
+    <a href="https://rnda.derechodeautor.gov.co:8081/" target="_blank">https://rnda.derechodeautor.gov.co:8081/</a>
+  </p>
+
+  <h3>🔹 Paso 2: Crear una cuenta</h3>
+  <ol>
+    <li>Selecciona <strong>“Registrarse”</strong> como persona natural.</li>
+    <li>Ingresa tus datos personales: nombre, cédula, correo, dirección, etc.</li>
+    <li>Crea una contraseña y verifica tu correo electrónico.</li>
+  </ol>
+
+  <h3>🔹 Paso 3: Iniciar un nuevo registro</h3>
+  <p>Una vez dentro del sistema, haz clic en el siguiente orden:</p>
+  <p><code>“Registrar Obra” → “Obra musical”</code></p>
+  <p>Luego deberás completar un formulario con:</p>
+  <ol>
+    <li><strong>Título de la obra:</strong><br>
+      Ejemplo: “Beat Drop Vol. 1 – Sample 003”.
+    </li>
+    <li><strong>Tipo de obra:</strong><br>
+      Escoges: “Obra musical con o sin letra”.
+    </li>
+    <li><strong>Autores:</strong><br>
+      Escribes tu nombre (o el de varios si fue colaboración).
+    </li>
+    <li><strong>Descripción:</strong><br>
+      Ejemplo: “Instrumental de hip-hop creada con sintetizadores digitales, duración 2:30 min”.
+    </li>
+    <li><strong>Soporte del archivo:</strong><br>
+      Adjunta el archivo (MP3, WAV, PDF si es solo letra).
+      <ul>
+        <li>Tamaño máximo: 10 MB.</li>
+        <li><strong>Importante:</strong> Sube solo una versión de referencia (un MP3 de baja calidad), no tu archivo maestro.</li>
+      </ul>
+    </li>
+  </ol>
+
+  <h3>🔹 Paso 4: Firmar y enviar</h3>
+  <ol>
+    <li>El sistema te genera un documento digital (formato PDF) con toda la información.</li>
+    <li>Lo firmas electrónicamente dentro de la misma plataforma.</li>
+    <li>Envías la solicitud.</li>
+  </ol>
+
+  <h3>🔹 Paso 5: Esperar la resolución</h3>
+  <p>En unos 15 a 30 días hábiles, la DNDA te enviará a tu correo el <strong>Certificado de Registro de Obra</strong>, que incluye un número, fecha y código QR.</p>
+  <p>Ese es el número que puedes ingresar en el campo "Número de Registro DNDA" al subir tu beat en BeatDrop.</p>
+
+</div>
+{% endblock %}

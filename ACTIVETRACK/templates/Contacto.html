@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Contactar Entrenador{% endblock %}
+
+{% block content %}
+<h1>Contactar a tu Entrenador</h1>
+<p>Habla directamente con tu entrenador para resolver dudas o recibir consejos personalizados.</p>
+
+<section class="chat-section">
+    <div class="chat-box" id="chat-box">
+        
+        {% for msg in mensajes %}
+            {% if msg.RemitenteId == admin_id %}
+            <div class="chat-message trainer">
+                <p>{{ msg.Mensaje }}</p>
+            </div>
+            {% else %}
+            <div class="chat-message user">
+                <p>{{ msg.Mensaje }}</p>
+            </div>
+            {% endif %}
+        {% else %}
+            <div class="chat-message trainer">
+                <p>👋 ¡Hola! Soy tu entrenador. ¿En qué puedo ayudarte hoy?</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <form id="chat-form" class="chat-input-area" method="POST" action="{{ url_for('enviar_mensaje_usuario') }}">
+        <input type="text" id="chat-input" name="mensaje" placeholder="Escribe tu mensaje..." required>
+        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+    </form>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Script para que el chat siempre muestre el último mensaje
+    document.addEventListener('DOMContentLoaded', () => {
+        const chatBox = document.getElementById('chat-box');
+        if (chatBox) {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    });
+</script>
+{% endblock %}

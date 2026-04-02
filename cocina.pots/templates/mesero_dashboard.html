@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Panel Mesero - DigitalFood{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h2>👨‍🍳 Panel del Mesero</h2>
+    <p>Gestión de pedidos y atención al cliente</p>
+</div>
+
+<div class="actions-grid">
+    <div class="action-card">
+        <h3>➕ Nuevo Pedido</h3>
+        <p>Crear un nuevo pedido para una mesa</p>
+        <a href="{{ url_for('nuevo_pedido') }}" class="btn btn-primary">Crear Pedido</a>
+    </div>
+    
+    <div class="action-card">
+        <h3>📋 Pedidos Activos</h3>
+        <p>Ver pedidos en proceso o listos para entregar</p>
+        <div class="pedidos-count">
+            <span class="count-badge">{{ pedidos_activos|length }}</span> pedidos activos
+        </div>
+    </div>
+</div>
+
+{% if pedidos_activos %}
+<div class="pedidos-section">
+    <h3>📦 Pedidos en Proceso y Listos</h3>
+    <div class="pedidos-grid">
+        {% for pedido in pedidos_activos %}
+        <!-- La clase del borde ahora es dinámica -->
+        <div class="pedido-card pedido-{{ pedido.estado }}">
+            <div class="pedido-header">
+                <h4>Mesa {{ pedido.mesa }}</h4>
+                <!-- La insignia de estado ahora es dinámica -->
+                <span class="estado-badge estado-{{ pedido.estado|lower }}">
+                    {{ pedido.estado|replace('_', ' ')|title }}
+                </span>
+            </div>
+            <div class="pedido-info">
+                <p><strong>Total:</strong> ${{ "%.0f"|format(pedido.total) }}</p>
+                <p><strong>Hora:</strong> {{ pedido.fecha_hora.strftime('%H:%M') }}</p>
+            </div>
+            
+            <!-- ===== ¡NUEVA SECCIÓN DE ACCIÓN! ===== -->
+            <div class="pedido-actions">
+                <!-- Si el pedido está 'listo', mostrar el botón para completar -->
+                {% if pedido.estado == 'listo' %}
+                <form action="{{ url_for('marcar_pedido_completado', id=pedido.id) }}" method="POST">
+                    <button type="submit" class="btn btn-success btn-sm btn-block">
+                        ✅ Marcar Completado
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+            
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<div class="menu-preview">
+    <!-- ... (El menú por categorías se mantiene igual) ... -->
+    <h3>🍽️ Menú Disponible</h3>
+    {% for grupo in productos_agrupados %}
+    <div class="categoria-seccion">
+        <h4 class="categoria-titulo">{{ grupo.nombre }}</h4>
+        <div class="productos-grid">
+            {% for producto in grupo.productos %}
+            <div class="producto-card">
+                <h4>{{ producto.nombre }}</h4>
+                <p class="producto-desc">{{ producto.descripcion }}</p>
+                <div class="producto-footer">
+                    <span class="producto-precio">${{ "%.0f"|format(producto.precio) }}</span>
+                    <span class="producto-stock">{{ producto.stock }} disponibles</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+        <p class="no-pedidos" style="text-align: center; color: #333; font-size: 1.1rem; margin-top: 2rem;">
+            No hay productos disponibles en el menú en este momento.
+        </p>
+    {% endfor %}
+</div>
+{% endblock %}

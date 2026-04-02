@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Gestión de Productos - DigitalFood{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h2>📦 Gestión de Productos</h2>
+    <p>Administra el menú del restaurante</p>
+</div>
+
+<!-- ===== SECCIÓN ACTUALIZADA ===== -->
+<div class="actions-bar" style="display: flex; gap: 1rem; align-items: center;">
+    <a href="{{ url_for('crear_producto') }}" class="btn btn-primary">
+        ➕ Agregar Producto
+    </a>
+    <!-- Botón de Volver Añadido -->
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">
+        ↩️ Volver al Dashboard
+    </a>
+</div>
+
+{% if productos %}
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Categoría</th>
+                <th>Stock</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+            <tr>
+                <td>{{ producto.nombre }}</td>
+                <td>{{ producto.descripcion|truncate(50) }}</td>
+                <td>${{ "%.0f"|format(producto.precio) }}</td>
+                <td>
+                    <span class="categoria-badge categoria-{{ producto.categoria.replace('_', '-') }}">
+                        {{ producto.categoria|replace('_', ' ')|title }}
+                    </span>
+                </td>
+                <td>{{ producto.stock }}</td>
+                <td>
+                    <span class="estado-badge estado-{{ producto.estado|lower }}">
+                        {{ producto.estado|title }}
+                    </span>
+                </td>
+                <td class="actions" style="display: flex; gap: 5px;">
+                    <a href="{{ url_for('editar_producto', id=producto.id) }}" class="btn btn-outline btn-sm">Editar</a>
+                    <form action="{{ url_for('eliminar_producto', id=producto.id) }}" method="POST"
+                          onsubmit="return confirm('¿Estás seguro de que quieres eliminar este producto?');">
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state">
+    <h3>📝 No hay productos registrados</h3>
+    <p>Comienza agregando productos al menú del restaurante.</p>
+    <a href="{{ url_for('crear_producto') }}" class="btn btn-primary">
+        ➕ Agregar Primer Producto
+    </a>
+</div>
+{% endif %}
+{% endblock %}

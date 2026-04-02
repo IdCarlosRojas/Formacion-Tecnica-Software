@@ -1,0 +1,9 @@
+Flask
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-CORS
+Flask-JWT-Extended
+werkzeug
+
+
+pip install -r requeriments.txt

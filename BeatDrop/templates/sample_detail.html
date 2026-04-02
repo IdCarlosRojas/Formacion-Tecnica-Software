@@ -1,0 +1,67 @@
+{% extends 'base_layout.html' %}
+{% block title %}{{ sample.Nombre }} | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+<div class="beat-detail-container" style="grid-template-columns: 1fr;">
+  
+  <div class="beat-detail-info">
+    <h1>Sample: {{ sample.Nombre }}</h1>
+    <div class="beat-detail-meta">
+      Por <a href="{{ url_for('search', q='@' + sample.artista_ref.NombreUsuario) }}">{{ sample.artista_ref.NombreUsuario }}</a>
+    </div>
+
+    <audio controls controlsList="nodownload" style="width: 100%; margin-bottom: 20px;">
+      <source src="{{ url_for('static', filename='uploads/audio/' + sample.audio_preview_url) }}" type="audio/mpeg">
+      Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    {% if sample.dnda_registro %}
+    <div style="background: #f0f8ff; border: 1px solid #cce5ff; padding: 10px 15px; border-radius: 8px; margin-bottom: 20px; font-size: 14px;">
+      <strong>🏛️ Obra Registrada (DNDA):</strong> {{ sample.dnda_registro }}
+      <br>
+      <small class="muted">El productor ha registrado esta obra ante la Dirección Nacional de Derecho de Autor.</small>
+    </div>
+    {% endif %}
+
+    <div class="licencias-list">
+      <h3>Licencia Disponible</h3>
+      
+      {% for lic in licencias %}
+      <div class="licencia-item" style="display: block; padding: 15px; background: #f9f9f9; border-radius: 8px;">
+        <div>
+          {% if lic.Tipo == 'Gratuita' %}
+            <div class="licencia-tipo" style="color: var(--green);">{{ lic.Tipo }}</div>
+          {% else %}
+            <div class="licencia-tipo" style="color: var(--accent-dark);">{{ lic.porcentaje_regalias }}% de Regalías</div>
+          {% endif %}
+          <div class="licencia-desc" style="margin-top: 5px;">{{ lic.descripcion }}</div>
+        </div>
+        <div class="licencia-comprar" style="margin-top: 20px; text-align: right;">
+          
+          {% if contrato_usuario %}
+            <a href="{{ url_for('static', filename='uploads/audio/' + sample.file_sample_url) }}" class="btn primary" 
+               {% if not sample.file_sample_url %} style="cursor: not-allowed; opacity: 0.6;" {% else %} download {% endif %}>
+              {% if sample.file_sample_url %}Descargar Sample{% else %}Archivo no disponible{% endif %}
+            </a>
+            <span class="btn secondary" style="cursor: default; margin-left: 10px;">Contrato Generado</span>
+          {% else %}
+            {% if sample.file_sample_url %}
+              <form action="{{ url_for('usar_sample', license_id=lic.SampleLicenseId) }}" method="POST">
+                <button type="submit" class="btn primary">Usar Sample y Generar Contrato</button>
+              </form>
+            {% else %}
+               <span class="btn secondary" style="cursor: not-allowed; opacity: 0.6;" title="El productor no ha subido el archivo de descarga.">
+                 No disponible para licenciar
+               </span>
+            {% endif %}
+          {% endif %}
+          </div>
+      </div>
+      {% else %}
+      <p>Este sample no tiene licencias disponibles.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

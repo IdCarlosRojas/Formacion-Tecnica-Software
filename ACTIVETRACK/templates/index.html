@@ -1,0 +1,165 @@
+html:index.html:index.html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ActiveTrack | Tu Gimnasio Digital</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='img/ActiveTrack-removebg-preview.png') }}" alt="Logo ActiveTrack"> 
+            <span class="logo-text">ACTIVETRACK</span>
+        </div>
+        </header>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flashes-public">
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <section class="hero">
+        <div class="hero-content-img">
+            <div class="text-large">ActiveTrack</div> 
+            <div class="right-content">
+                <a href="#" id="open-modal-btn-hero" class="hero-cta">INICIAR</a>
+            </div>
+        </div>
+    </section>
+
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>Bienvenido a ActiveTrack</h3>
+            <p>Ingresa tus credenciales para acceder al dashboard.</p>
+            
+            <form id="login-form" class="login-form" method="POST" action="{{ url_for('login') }}">
+                <input type="email" name="username" placeholder="Correo Electrónico" required> 
+                <input type="password" name="password" placeholder="Contraseña" required>
+                <button type="submit" class="cta-login">INICIAR SESIÓN</button>
+            </form>
+
+            <p class="register-link">¿No tienes cuenta? <a href="#" id="register-link">Regístrate aquí</a></p>
+            
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+            <h4 style="margin-bottom: 15px; color: #555;">Inicio Rápido (Demo)</h4>
+            <div class="quick-login-bar">
+                <button type="button" class="quick-login-btn admin" id="admin-login-btn">
+                    <i class="fas fa-user-tie"></i> Admin
+                </button>
+                <button type="button" class="quick-login-btn instructor" id="instructor-login-btn">
+                    <i class="fas fa-user-shield"></i> Instructor
+                </button>
+                <button type="button" class="quick-login-btn demo" id="demo-login-btn">
+                    <i class="fas fa-user-astronaut"></i> Demo User
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>Crear Cuenta en ActiveTrack</h3>
+            <p>Únete a nuestra comunidad y comienza a registrar tu progreso.</p>
+            
+            <form id="register-form" class="login-form" method="POST" action="{{ url_for('register') }}">
+                <input type="text" name="fullname" placeholder="Nombre Completo" required>
+                <input type="email" name="email" placeholder="Correo Electrónico" required> 
+                <input type="password" name="password" placeholder="Contraseña" required>
+                
+                <div class="form-group-terms">
+                    <input type="checkbox" id="terms-checkbox" name="terms" value="agreed" required>
+                    <label for="terms-checkbox">
+                        He leído y acepto la 
+                        <a href="#" id="open-terms-link">Política de Tratamiento de Datos</a>.
+                    </label>
+                </div>
+                <button type="submit" class="cta-login">REGISTRARME</button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="instructor-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>Seleccionar Instructor</h3>
+            <p>Haz clic en un instructor para iniciar sesión como uno.</p>
+            <div class="instructor-list">
+                <div class="instructor-choice" data-email="ana.duque@activetrack.com" data-pass="instructor123">
+                    <i class="fas fa-user-circle"></i> Ana Gabriela Duque
+                </div>
+                <div class="instructor-choice" data-email="valerie.bonilla@activetrack.com" data-pass="instructor123">
+                    <i class="fas fa-user-circle"></i> Valerie Bonilla
+                </div>
+                <div class="instructor-choice" data-email="luisa.pineda@activetrack.com" data-pass="instructor123">
+                    <i class="fas fa-user-circle"></i> Luisa Pineda
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="terms-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>Política de Tratamiento de Datos Personales</h3>
+            <p>Basada en la Ley 1581 de 2012 de Colombia.</p>
+            
+            <div class="terms-text-container">
+                <p>Al registrarse en ActiveTrack, usted (en adelante, el "Titular") acepta y autoriza de manera previa, explícita e inequívoca a ActiveTrack (en adelante, el "Responsable") para el tratamiento de sus datos personales, conforme a lo dispuesto en la Ley 1581 de 2012 y el Decreto 1377 de 2013.</p>
+
+                <h4>1. Responsable del Tratamiento</h4>
+                <p>ActiveTrack, con correo electrónico de contacto admin@activetrack.com, será el Responsable del tratamiento de los datos personales suministrados.</p>
+
+                <h4>2. Finalidad del Tratamiento</h4>
+                <p>Los datos personales recolectados (nombre, correo electrónico, contraseña, y opcionalmente edad, peso, altura, y datos de progreso) serán utilizados para las siguientes finalidades:</p>
+                <ul>
+                    <li>Validar su identidad y crear su cuenta de usuario.</li>
+                    <li>Prestar los servicios ofrecidos en la plataforma (gestión de rutinas, registro de progreso, agenda de clases).</li>
+                    <li>Gestionar su membresía y procesar pagos.</li>
+                    <li>Enviar comunicaciones relacionadas con el servicio, notificaciones y actualizaciones de la plataforma.</li>
+                    <li>Permitir la comunicación con instructores o administradores a través del chat interno.</li>
+                    <li>Realizar análisis estadísticos internos para la mejora del servicio.</li>
+                </ul>
+
+                <h4>3. Datos Recolectados</h4>
+                <p>Recolectamos datos de identificación (Nombre, Correo), datos de autenticación (Contraseña encriptada), y datos relacionados con su actividad física (Peso, Altura, Metas, registros de entrenamientos, progreso físico). Estos últimos son de carácter opcional y son gestionados únicamente por el Titular.</p>
+
+                <h4>4. Derechos del Titular (Habeas Data)</h4>
+                <p>Como Titular de los datos, usted tiene derecho a:</p>
+                <ul>
+                    <li><strong>Conocer, Actualizar y Rectificar</strong> sus datos personales.</li>
+                    <li><strong>Solicitar prueba</strong> de la autorización otorgada.</li>
+                    <li><strong>Ser informado</strong> sobre el uso que se le ha dado a sus datos.</li>
+                    <li><strong>Presentar quejas</strong> ante la Superintendencia de Industria y Comercio (SIC) por infracciones a la ley.</li>
+                    <li><strong>Revocar la autorización</strong> y/o solicitar la supresión de sus datos, siempre que no exista un deber legal o contractual de permanecer en la base de datos.</li>
+                    <li><strong>Acceder</strong> de forma gratuita a sus datos personales.</li>
+                </ul>
+                <p>Puede ejercer estos derechos a través de su panel de "Mi Perfil" dentro de la aplicación o contactando al Responsable en admin@activetrack.com.</p>
+
+                <h4>5. Seguridad de la Información</h4>
+                <p>El Responsable ha implementado medidas técnicas, humanas y administrativas necesarias para proteger sus datos, incluyendo el uso de encriptación para contraseñas (bcrypt) y conexiones seguras, evitando el acceso no autorizado, adulteración o pérdida de la información.</p>
+
+                <h4>6. Vigencia</h4>
+                <p>Esta política rige a partir de su aceptación. La base de datos se mantendrá vigente mientras dure la finalidad para la que fueron recolectados los datos, o hasta que el Titular solicite su supresión.</p>
+
+                <p><strong>Al marcar la casilla de aceptación, usted declara que ha leído, entendido y aceptado la presente Política de Tratamiento de Datos Personales.</strong></p>
+            </div>
+            
+            <button type="button" class="cta-login close-terms-btn" style="margin-top: 20px; background-color: #6c757d;">Cerrar</button>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Reportes - DigitalFood{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h2>📈 Reportes de Ventas</h2>
+    <p>Estadísticas generales del restaurante</p>
+</div>
+
+<div class="actions-bar">
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">
+        ↩️ Volver al Dashboard
+    </a>
+</div>
+
+<!-- Usamos los mismos estilos de .stats-grid del dashboard -->
+<div class="stats-grid" style="margin-top: 2rem;">
+    <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-info">
+            <h3>${{ "%.0f"|format(total_ventas) }}</h3>
+            <p>Total en Ventas</p>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-info">
+            <h3>{{ pedidos_completados }}</h3>
+            <p>Pedidos Completados (Listos)</p>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">📦</div>
+        <div class="stat-info">
+            <h3>{{ total_pedidos }}</h3>
+            <p>Total Pedidos Históricos</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

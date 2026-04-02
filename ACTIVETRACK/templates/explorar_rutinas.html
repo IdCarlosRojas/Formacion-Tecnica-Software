@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Explorar Rutinas{% endblock %}
+
+{% block content %}
+<style>
+    .routine-category {
+        margin-bottom: 30px;
+    }
+    .routine-category h2 {
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+    .predefined-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    .predefined-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        padding: 20px;
+        border-left: 5px solid #007bff; /* Azul para predefinidas */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .predefined-card h3 {
+        margin-top: 0;
+    }
+    .predefined-card p {
+        color: #555;
+        font-size: 0.9em;
+        flex-grow: 1;
+    }
+    .btn-add-routine {
+        background-color: #5cb85c;
+        color: white;
+        text-decoration: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-weight: 500;
+        display: inline-block;
+        margin-top: 15px;
+        border: none;
+        cursor: pointer;
+        text-align: center;
+    }
+    .btn-add-routine:hover {
+        background-color: #4cae4c;
+    }
+</style>
+
+<h1>Explorar Rutinas Predefinidas</h1>
+<p>Encuentra un plan que se ajuste a tus objetivos y añádelo a "Mis Rutinas".</p>
+
+<section class="routine-category">
+    <h2>Rutinas de Hipertrofia (Ganar Músculo)</h2>
+    <div class="predefined-grid">
+        
+        <div class="predefined-card">
+            <div>
+                <h3>PPL - Empuje (Push)</h3>
+                <p>Rutina de empuje (Pecho, Hombro, Tríceps) del popular split Push-Pull-Legs.</p>
+            </div>
+            <form action="{{ url_for('add_rutina_predefinida', tipo_rutina='ppl_push') }}" method="POST">
+                <button type="submit" class="btn-add-routine">Añadir a Mis Rutinas</button>
+            </form>
+        </div>
+
+        <div class="predefined-card">
+            <div>
+                <h3>PPL - Tracción (Pull)</h3>
+                <p>Rutina de tracción (Espalda, Bíceps, Trapecio) del popular split Push-Pull-Legs.</p>
+            </div>
+            <form action="{{ url_for('add_rutina_predefinida', tipo_rutina='ppl_pull') }}" method="POST">
+                <button type="submit" class="btn-add-routine">Añadir a Mis Rutinas</button>
+            </form>
+        </div>
+        
+        <div class="predefined-card">
+            <div>
+                <h3>PPL - Pierna (Leg)</h3>
+                <p>Rutina de pierna (Cuádriceps, Isquios, Glúteos) del popular split Push-Pull-Legs.</p>
+            </div>
+            <form action="{{ url_for('add_rutina_predefinida', tipo_rutina='ppl_leg') }}" method="POST">
+                <button type="submit" class="btn-add-routine">Añadir a Mis Rutinas</button>
+            </form>
+        </div>
+
+    </div>
+</section>
+
+<section class="routine-category">
+    <h2>Rutinas de Fuerza</h2>
+    <div class="predefined-grid">
+        
+        <div class="predefined-card">
+            <div>
+                <h3>Full Body - 3 Días (Fuerza)</h3>
+                <p>Enfocada en ejercicios compuestos (Sentadilla, Banca, Peso Muerto). Ideal para principiantes.</p>
+            </div>
+            <form action="{{ url_for('add_rutina_predefinida', tipo_rutina='full_body') }}" method="POST">
+                <button type="submit" class="btn-add-routine">Añadir a Mis Rutinas</button>
+            </form>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

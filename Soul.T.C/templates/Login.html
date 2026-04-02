@@ -1,0 +1,86 @@
+{% extends "Base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+  <div class="form-container">
+    <form action="{{ url_for('login') }}" method="POST">
+      <h2 style="text-align: center;">Iniciar Sesión</h2>
+      
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="contraseña">Contraseña</label>
+        <input type="password" id="contraseña" name="contraseña" placeholder="••••••••" required>
+      </div>
+      
+      <button type="submit" class="btn btn-primary btn-full">Login</button>
+      
+      <p style="text-align: center; margin-top: 1.5rem; color: var(--color-text-muted);">
+        ¿No tienes cuenta? <a href="{{ url_for('registro') }}">Regístrate</a>
+      </p>
+
+      <div class="demo-login-options">
+        <h4 style="color: var(--color-text-muted); text-align: center; font-family: var(--font-body); margin-bottom: 1rem;">O prueba un perfil de demo:</h4>
+        <div class="demo-buttons">
+          <button type="button" class="btn btn-secondary" onclick="fillLogin('admin@soul.tc', 'admin123')">Demo Admin</button>
+          <button type="button" class="btn btn-secondary" onclick="openModal('clientModal')">Demo Cliente</button>
+          <button type="button" class="btn btn-secondary" onclick="openModal('tattooerModal')">Demo Tatuador</button>
+        </div>
+      </div>
+      </form>
+  </div>
+{% endblock %}
+
+
+{% block scripts %}
+
+<div id="clientModal" class="modal-backdrop" style="display:none;">
+  <div class="modal-content">
+    <span class="modal-close" onclick="closeModal('clientModal')">&times;</span>
+    <h2>Elige un Cliente</h2>
+    <ul class="demo-user-list">
+      {% for client in demo_clients %}
+        <li>
+          <a href="javascript:void(0)" onclick="fillLogin('{{ client.email }}', 'cliente123')">
+            {{ client.nombre }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<div id="tattooerModal" class="modal-backdrop" style="display:none;">
+  <div class="modal-content">
+    <span class="modal-close" onclick="closeModal('tattooerModal')">&times;</span>
+    <h2>Elige un Tatuador</h2>
+    <ul class="demo-user-list">
+      {% for tattooer in demo_tattooers %}
+        <li>
+          <a href="javascript:void(0)" onclick="fillLogin('{{ tattooer.email }}', 'tatuador123')">
+            {{ tattooer.nombre }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<script>
+  function fillLogin(email, password) {
+    document.getElementById('email').value = email;
+    document.getElementById('contraseña').value = password;
+    closeModal('clientModal');
+    closeModal('tattooerModal');
+  }
+  function openModal(modalId) {
+    document.getElementById(modalId).style.display = 'flex';
+  }
+  function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+  }
+</script>
+{% endblock %}

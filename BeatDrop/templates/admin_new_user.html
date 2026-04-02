@@ -1,0 +1,53 @@
+{% extends 'base_layout.html' %}
+{% block title %}Crear Nuevo Usuario | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <a href="{{ url_for('admin_users') }}">&larr; Volver a Usuarios</a>
+  <h2>Crear Nuevo Usuario</h2>
+  <p class="section-desc">Crea una nueva cuenta de productor o administrador.</p>
+  
+  <form action="{{ url_for('admin_new_user') }}" method="POST">
+    <div class="form-grid">
+      
+      <div class="form-group">
+        <label for="nombre">Nombre Completo</label>
+        <input type="text" id="nombre" name="nombre" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="usuario">Nombre de Usuario</label>
+        <input type="text" id="usuario" name="usuario" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="correo">Correo Electrónico</label>
+        <input type="email" id="correo" name="correo" required>
+      </div>
+
+      <div class="form-group">
+        <label for="contraseña">Contraseña</label>
+        <input type="password" id="contraseña" name="contraseña" required>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="rol">Rol</label>
+        <select id="rol" name="rol">
+          <option value="productor" selected>Productor</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      
+      <div class="form-group full-width">
+        <label for="bio">Biografía</label>
+        <textarea id="bio" name="bio"></textarea>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn primary">Crear Usuario</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

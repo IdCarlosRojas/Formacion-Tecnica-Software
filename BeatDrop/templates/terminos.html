@@ -1,0 +1,31 @@
+{% extends 'base_auth.html' %}
+{% block title %}Términos y Condiciones | BeatDrop{% endblock %}
+
+{% block content %}
+<div class="terminos-container">
+    <h2>Términos y Política de Privacidad</h2>
+    <p>Fecha de última actualización: 4 de noviembre de 2025</p>
+
+    <p>Bienvenido a BeatDrop. Al registrarse, usted acepta nuestra política de tratamiento de datos personales, fundamental para proteger sus creaciones.</p>
+
+    <h3>1. Protección de Derechos de Autor</h3>
+    <p>BeatDrop actúa como un gestor de derechos de autor digital. Al subir su contenido, usted declara que posee todos los derechos sobre la obra.</p>
+    <p>Nuestra plataforma facilita la gestión de licencias y se alinea con los principios de protección de la <strong>Ley 1915 de 2018</strong> de Colombia, permitiendo un reparto justo de beneficios y la monetización de sus creaciones.</p>
+
+    <h3>2. Tratamiento de Datos Personales</h3>
+    <p>Al registrarse, recopilamos su Nombre, Nombre de Usuario y Correo Electrónico. Estos datos se usan para:</p>
+    <ul>
+        <li>Administrar su perfil de creador.</li>
+        <li>Facilitar colaboraciones y contacto con otros artistas.</li>
+        <li>Procesar pagos y facturación por licencias vendidas.</li>
+        <li>Enviar notificaciones sobre su cuenta y actividad.</li>
+    </ul>
+    
+    <h3>3. Sus Derechos (Habeas Data)</h3>
+    <p>Usted tiene derecho a conocer, actualizar, rectificar y suprimir su información personal de nuestras bases de datos en cualquier momento. No venderemos ni compartiremos su información personal con terceros sin su consentimiento, salvo obligación legal.</p>
+
+    <h3>4. Monetización y Comisiones</h3>
+    <p>El uso de BeatDrop para la venta de licencias estándar (MP3, WAV, Stems) es gratuito para el productor. Sin embargo, para la gestión, procesamiento y venta de Licencias Exclusivas (Patentes), BeatDrop actuará como intermediario y retendrá una comisión de servicio del 15% sobre el valor final de dicha venta.</p>
+    <a href="{{ url_for('registro') }}" class="btn secondary full" style="margin-top: 20px;">Volver al Registro</a>
+</div>
+{% endblock %}

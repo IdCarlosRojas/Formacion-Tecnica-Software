@@ -1,0 +1,75 @@
+{% extends "Base.html" %}
+{% block title %}Mi Panel{% endblock %}
+
+{% block content %}
+<h2>Panel de Cliente</h2>
+<p>¡Bienvenido, <strong>{{ usuario.nombre }}</strong>!</p>
+
+<div class="dashboard-grid">
+  <div class="card" style="grid-column: 1 / -1;"> <h3>Mis Citas Solicitadas</h3>
+    <div style="overflow-x: auto;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Tatuador</th>
+            <th>Fecha y Hora</th>
+            <th>Estado</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cita in citas %}
+          <tr>
+            <td>
+              <a href="{{ url_for('perfil_tatuador', id=cita.tatuadorId) }}">{{ cita.tatuador.nombre }}</a>
+            </td>
+            <td>{{ cita.fecha }} a las {{ cita.hora }}</td>
+            <td>
+              <span class="status-{{ cita.estado | lower }}">{{ cita.estado }}</span>
+            </td>
+            <td>
+              {% if cita.estado == 'Completada' %}
+                {% if not cita.resena %}
+                  <a href="{{ url_for('dejar_resena', cita_id=cita.id) }}" class="btn btn-small btn-warning">Dejar Reseña</a>
+                {% else %}
+                  <span style="color: var(--color-text-muted); font-size: 0.9rem;">Reseña enviada</span>
+                {% endif %}
+              {% else %}
+                <span style="color: var(--color-text-muted); font-size: 0.9rem;">--</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="4" style="text-align: center;">Aún no has solicitado ninguna cita. <a href="{{ url_for('buscar') }}">¡Busca un artista!</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="grid-column: 1 / -1;">
+    <h3>Artistas Recomendados para Ti</h3>
+    <p style="color: var(--color-text-muted); margin-top: -1rem;">Basado en las mejores calificaciones y actividad en la plataforma.</p>
+    <div class="dashboard-grid">
+      {% for perfil, score, avg_rating, num_reviews in recomendados %}
+      <div class="card">
+        <h4>{{ perfil.usuario.nombre }}</h4>
+        <div class="star-rating" style="font-size: 1.2rem;">
+          <span>⭐</span>
+          <span class="avg" style="font-size: 1rem;">{{ "%.1f"|format(avg_rating) }}</span>
+          <span class="total" style="font-size: 0.9rem;"> ({{ num_reviews }} reseñas)</span>
+        </div>
+        <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-top: 1rem;">
+          {{ perfil.especialidades or 'Artista verificado' }}
+        </p>
+        <a href="{{ url_for('perfil_tatuador', id=perfil.usuarioId) }}" style="margin-top: auto;">Ver Perfil &rarr;</a>
+      </div>
+      {% else %}
+      <p>No hay suficientes datos para generar recomendaciones. ¡Explora y deja reseñas!</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

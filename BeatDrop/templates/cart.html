@@ -1,0 +1,61 @@
+{% extends 'base_layout.html' %}
+{% block title %}Carrito de Compras | BeatDrop{% endblock %}
+{% block main_class %}feed{% endblock %}
+
+{% block content %}
+<header class="feed-header">
+  <div class="feed-title">
+    <h2>Carrito de Compras</h2>
+    <p class="muted">Tienes {{ cart_items|length }} item(s) en tu carrito.</p>
+  </div>
+</header>
+
+{% if cart_items %}
+<div class="cart-page">
+  <div class="cart-items">
+    {% for item in cart_items %}
+    <div class="cart-item">
+      
+      <div class="cart-item-cover" 
+           style="background-image: url('{% if item.cover.startswith('http') %}{{ item.cover }}{% else %}{{ url_for('static', filename='uploads/covers/' + item.cover) }}{% endif %}');">
+      </div>
+      
+      <div class="cart-item-info">
+        <h4>{{ item.nombre }}</h4>
+        <div class="cart-item-meta">Artista: {{ item.artista }}</div>
+        <div class="cart-item-meta">Licencia: <strong>{{ item.licencia_tipo }}</strong></div>
+      </div>
+      <div class="cart-item-precio">${{ "%.2f"|format(item.precio) }}</div>
+      <div class="cart-item-actions">
+        <form action="{{ url_for('remove_from_cart', beat_id=item.beat_id) }}" method="POST">
+          <button type="submit" class="btn-danger">Quitar</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <aside class="cart-summary">
+    <h3>Resumen</h3>
+    <div class="summary-line">
+      <span>Subtotal</span>
+      <span>${{ "%.2f"|format(total) }}</span>
+    </div>
+    <div class="summary-line summary-total">
+      <span>Total</span>
+      <span>${{ "%.2f"|format(total) }}</span>
+    </div>
+    
+    <form action="{{ url_for('checkout') }}" method="POST">
+      <button type="submit" class="btn primary full" style="margin-top: 20px;">Completar Compra (Simulado)</button>
+    </form>
+    <small class="muted" style="text-align: center; display: block; margin-top: 10px;">Esto simulará el pago y añadirá los beats a "Mis Compras".</small>
+    </aside>
+</div>
+{% else %}
+<div class="main-content" style="text-align: center;">
+  <p>Tu carrito está vacío.</p>
+  <a href="{{ url_for('index') }}" class="btn primary">Explorar beats</a>
+</div>
+{% endif %}
+{% endblock %}

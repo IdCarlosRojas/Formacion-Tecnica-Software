@@ -1,0 +1,46 @@
+{% extends 'base_layout.html' %}
+{% block title %}Resultados para '{{ query }}' | BeatDrop{% endblock %}
+{% block main_class %}feed{% endblock %}
+
+{% block content %}
+<header class="feed-header">
+  <div class="feed-title">
+    <h2>Resultados para "{{ query }}"</h2>
+    <p class="muted">Se encontraron {{ results|length }} beats.</p>
+  </div>
+</header>
+
+<section class="cards" id="beatsGrid">
+  {% for beat in results %}
+  <article class="beat-card">
+    
+    <a href="{{ url_for('beat_detail', beat_id=beat.BeatId) }}" class="cover-link" 
+       style="background-image: url('{% if beat.cover_url.startswith('http') %}{{ beat.cover_url }}{% else %}{{ url_for('static', filename='uploads/covers/' + beat.cover_url) }}{% endif %}');">
+    </a>
+
+    <div class="beat-info">
+      <h3><a href="{{ url_for('beat_detail', beat_id=beat.BeatId) }}">{{ beat.Nombre }}</a></h3>
+      <div class="meta">Producer: <a href="{{ url_for('search', q='@' + beat.artista_ref.NombreUsuario) }}">{{ beat.artista_ref.NombreUsuario }}</a> • {{ beat.Bpm }} BPM • {{ beat.Genero }}</div>
+      <div class="card-actions">
+        
+        {% if beat.precio_base is not none %}
+          <span class="meta">Desde ${{ "%.2f"|format(beat.precio_base) }}</span>
+        {% else %}
+          <span class="meta" style="font-weight: 600; color: var(--accent-dark);">No a la venta</span>
+        {% endif %}
+
+        <form action="{{ url_for('toggle_favorito', beat_id=beat.BeatId) }}" method="POST" style="display: inline;">
+          <button type="submit" class="save-btn {% if beat.BeatId in favoritos_ids %}saved{% endif %}" title="Guardar">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </article>
+  {% else %}
+  <p>No se encontraron resultados para tu búsqueda.</p>
+  {% endfor %}
+</section>
+{% endblock %}

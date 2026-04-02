@@ -1,0 +1,128 @@
+/* static/admin_custom.css */
+
+/* --- Estilos para Tablas --- */
+.admin-table-container {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.admin-table th {
+    background-color: #f8f8f8;
+    font-weight: 600;
+    color: #333;
+}
+
+.admin-table tr:hover {
+    background-color: #fdfdfd;
+}
+
+.admin-table .actions {
+    display: flex;
+    gap: 10px;
+}
+
+.admin-table .btn-edit {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+.admin-table .btn-edit:hover {
+    background-color: #0056b3;
+}
+
+.admin-table .btn-delete {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #dc3545;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.9em;
+    border: none;
+    cursor: pointer;
+    font-family: "Roboto", sans-serif;
+}
+.admin-table .btn-delete:hover {
+    background-color: #c82333;
+}
+
+
+/* --- Estilos para Formularios --- */
+.admin-form-container {
+    max-width: 800px;
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: "Roboto", sans-serif;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-primary {
+    background-color: #ffa500;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+.btn-primary:hover {
+    background-color: #ff8c00;
+}

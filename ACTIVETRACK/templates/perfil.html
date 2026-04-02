@@ -1,0 +1,362 @@
+{% extends "base.html" %}
+{% block title %}Mi Perfil{% endblock %}
+
+{% block content %}
+<style>
+    /* (Estilos sin cambios) */
+    .profile-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 30px;
+    }
+    .profile-card, .profile-main {
+        background: white;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .profile-card {
+        text-align: center;
+        position: sticky;
+        top: 75px;
+    }
+    .profile-avatar-container {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        margin: 0 auto 20px auto;
+    }
+    .profile-avatar {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #ffa500;
+    }
+    .profile-pic-upload-label {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background: #333;
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: 2px solid white;
+        transition: background 0.3s;
+    }
+    .profile-pic-upload-label:hover {
+        background: #ffa500;
+    }
+    .profile-card h2 {
+        font-size: 1.8em;
+        margin-bottom: 10px;
+        color: #1e1e1e;
+    }
+    .profile-card .goal {
+        font-style: italic;
+        color: #555;
+        margin-bottom: 20px;
+    }
+    .profile-stats { 
+        display: flex; 
+        justify-content: space-around; 
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+    .profile-stats div { text-align: center; }
+    .profile-stats .stat-num { font-size: 1.5em; font-weight: 700; color: #ffa500; }
+    .profile-stats .stat-label { color: #666; font-size: 0.9em; }
+    .profile-main h1 {
+        margin-top: 0;
+        border-bottom: 2px solid #f4f4f4;
+        padding-bottom: 15px;
+    }
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #333;
+    }
+    .form-group input, .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-family: "Roboto", sans-serif;
+    }
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+    .form-actions {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+    }
+    .btn-primary {
+        background-color: #ffa500;
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 1em;
+        transition: background-color 0.3s;
+    }
+    .btn-primary:hover {
+        background-color: #ff8c00;
+    }
+    .profile-progress {
+        margin-top: 30px;
+    }
+    .progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    @media (max-width: 950px) {
+        .profile-grid {
+            grid-template-columns: 1fr;
+        }
+        .profile-card {
+            position: static;
+        }
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="profile-grid">
+    
+    <aside class="profile-card">
+        <form id="profileForm" method="POST" enctype="multipart/form-data" action="{{ url_for('perfil') }}">
+            
+            <div class="profile-avatar-container">
+                <img src="{{ profile_pic_url }}" alt="Foto de Perfil" class="profile-avatar" id="currentProfilePic">
+                <label for="profile_pic_upload" class="profile-pic-upload-label" title="Cambiar foto">
+                    <i class="fas fa-camera"></i> 
+                </label>
+                <input type="file" id="profile_pic_upload" name="profile_pic" style="display:none;" accept="image/*" onchange="previewProfilePic(event)">
+            </div>
+
+            <h2>{{ user.Nombre }}</h2>
+            <p class="goal">"{{ user.Goal or 'Define tu objetivo...' }}"</p>
+            <p style="color: #888;">{{ user.Correo }}</p>
+
+            <div class="profile-stats">
+                <div>
+                    <div class="stat-num">{{ user.get_total_workouts() }}</div>
+                    <div class="stat-label">Entrenos</div>
+                </div>
+                <div>
+                    <div class="stat-num">{{ user.CurrentWeight or 'N/A' }}</div>
+                    <div class="stat-label">Peso (kg)</div>
+                </div>
+                <div>
+                    <div class="stat-num">{{ user.Height or 'N/A' }}</div>
+                    <div class="stat-label">Altura (cm)</div>
+                </div>
+            </div>
+        
+    </aside>
+
+    <main class="profile-main">
+        <h1>Editar Perfil</h1>
+        
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="nombre">Nombre Completo</label>
+                    <input type="text" id="nombre" name="nombre" value="{{ user.Nombre }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="edad">Edad</label>
+                    <input type="number" id="edad" name="edad" value="{{ user.Edad or '' }}" placeholder="Ej. 25">
+                </div>
+                <div class="form-group">
+                    <label for="currentWeight">Peso Actual (kg)</label>
+                    <input type="number" step="0.1" id="currentWeight" name="currentWeight" value="{{ user.CurrentWeight or '' }}" placeholder="Ej. 75.5">
+                </div>
+                <div class="form-group">
+                    <label for="height">Altura (cm)</label>
+                    <input type="number" step="0.1" id="height" name="height" value="{{ user.Height or '' }}" placeholder="Ej. 180">
+                </div>
+                <div class="form-group full-width">
+                    <label for="goal">Mi Objetivo Principal</label>
+                    <select id="goal" name="goal">
+                        <option value="" {% if not user.Goal %}selected{% endif %} disabled>-- Selecciona un objetivo --</option>
+                        <option value="perder_grasa" {% if user.Goal == 'perder_grasa' %}selected{% endif %}>Perder Grasa</option>
+                        <option value="ganar_musculo" {% if user.Goal == 'ganar_musculo' %}selected{% endif %}>Ganar Músculo</option>
+                        <option value="mantener" {% if user.Goal == 'mantener' %}selected{% endif %}>Mantener Peso</option>
+                        <option value="ganar_fuerza" {% if user.Goal == 'ganar_fuerza' %}selected{% endif %}>Ganar Fuerza</option>
+                    </select>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Guardar Cambios</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="profile-progress">
+            <hr style="margin: 30px 0;">
+            
+            <div class="progress-header">
+                <h1>Mi Progreso</h1>
+                <button id="open-metrics-modal" class="hero-cta cta-log-metric" style="margin-bottom: 0;">
+                    <i class="fas fa-plus-circle"></i> Registrar Métrica
+                </button>
+            </div>
+            
+            <section class="section-chart full-width-chart">
+                <h2>Evolución de Peso (kg)</h2>
+                <div class="chart-container">
+                   <canvas id="weightChart"></canvas> 
+                </div>
+            </section>
+            
+            <section class="section-chart full-width-chart">
+                <h2>Progreso de Volumen Total (kg)</h2>
+                <div class="chart-container">
+                   <canvas id="strengthChart"></canvas> 
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+
+
+<div id="metrics-modal" class="modal">
+    <div class="modal-content">
+        <span id="close-metrics-modal" class="close-btn">&times;</span>
+        <h3>Registrar Métrica</h3>
+        <p>Añade tus mediciones de hoy. (El peso se actualizará en tu perfil).</p>
+        
+        <form id="metrics-form" class="login-form" method="POST" action="{{ url_for('agregar_progreso') }}">
+            <label for="current-weight">Peso (kg) *</label>
+            <input type="number" step="0.1" id="current-weight" name="current-weight" required>
+            
+            <label for="current-fat">Grasa Corporal (%) (Opcional)</label>
+            <input type="number" step="0.1" id="current-fat" name="current-fat">
+            
+            <label for="current-muscle">Masa Muscular (kg) (Opcional)</label>
+            <input type="number" step="0.1" id="current-muscle" name="current-muscle">
+            
+            <button type="submit" class="cta-login">Guardar Métrica</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    // --- LÓGICA PARA EL MODAL ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const metricsModal = document.getElementById('metrics-modal');
+        const openMetricsBtn = document.getElementById('open-metrics-modal');
+        const closeMetricsBtn = document.getElementById('close-metrics-modal');
+        
+        if (openMetricsBtn) {
+            openMetricsBtn.addEventListener('click', () => {
+                if(metricsModal) metricsModal.style.display = 'block';
+            });
+        }
+        if (closeMetricsBtn) {
+            closeMetricsBtn.addEventListener('click', () => {
+                if(metricsModal) metricsModal.style.display = 'none';
+            });
+        }
+        window.addEventListener('click', (event) => {
+            if (event.target === metricsModal) {
+                metricsModal.style.display = "none";
+            }
+        });
+    });
+
+    // --- LÓGICA PARA VISTA PREVIA DE FOTO ---
+    function previewProfilePic(event) {
+        if (event.target.files && event.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(){
+                const output = document.getElementById('currentProfilePic');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    }
+
+    // --- LÓGICA PARA LAS GRÁFICAS ---
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('{{ url_for("chart_data") }}')
+            .then(response => response.json())
+            .then(data => {
+                
+                // 1. Gráfica de Peso
+                const ctxWeight = document.getElementById('weightChart');
+                if (ctxWeight) {
+                    new Chart(ctxWeight, {
+                        type: 'line',
+                        data: {
+                            labels: data.weightChart.labels,
+                            datasets: [{
+                                label: 'Peso (kg)',
+                                data: data.weightChart.data,
+                                borderColor: '#ffa500',
+                                backgroundColor: 'rgba(255, 165, 0, 0.1)',
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: { y: { beginAtZero: false } }
+                        }
+                    });
+                }
+                
+                // 2. Gráfica de Fuerza (Volumen)
+                const ctxStrength = document.getElementById('strengthChart');
+                if (ctxStrength) {
+                    new Chart(ctxStrength, {
+                        type: 'line',
+                        data: {
+                            labels: data.strengthChart.labels,
+                            datasets: [{
+                                label: 'Volumen Total (kg)', // Título actualizado
+                                data: data.strengthChart.data,
+                                borderColor: '#007bff',
+                                backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                         options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: { y: { beginAtZero: false } }
+                        }
+                    });
+                }
+            })
+            .catch(error => console.error('Error al cargar datos de gráficas:', error));
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigitalFood POTS - Transforma tu Restaurante</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos específicos para esta landing page */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f7f7f7; /* Fondo claro para contrastar con las secciones */
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #FF9900 0%, #FFCC00 100%); /* Naranja a amarillo */
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden; /* Para las formas de fondo */
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: rotate(45deg);
+        }
+
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            right: -80px;
+            width: 250px;
+            height: 250px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: rotate(-30deg);
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative; /* Para asegurar que el contenido esté sobre las formas */
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .hero-actions .btn {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+        }
+
+        /* Sección de Características */
+        .features-section {
+            padding: 80px 20px;
+            background-color: #fff;
+            text-align: center;
+        }
+
+        .features-section h2 {
+            font-size: 2.8rem;
+            color: #28a745; /* Verde de la imagen */
+            margin-bottom: 60px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background-color: #fcfcfc;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-card i {
+            font-size: 3rem;
+            color: #FF9900; /* Naranja */
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.8rem;
+            color: #444;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Sección de Propuesta de Valor (con imagen) */
+        .value-proposition-section {
+            background: linear-gradient(135deg, #FFCC00 0%, #FFD700 100%); /* Amarillo claro */
+            padding: 80px 20px;
+            color: #333;
+            display: flex;
+            flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .value-content {
+            flex: 1; /* Ocupa el espacio disponible */
+            max-width: 600px;
+            text-align: left;
+        }
+
+        .value-content h2 {
+            font-size: 2.8rem;
+            color: #764ba2; /* Morado del fondo original de tu app */
+            margin-bottom: 25px;
+        }
+
+        .value-content p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .value-content ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+        }
+
+        .value-content ul li {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .value-content ul li i {
+            color: #28a745; /* Verde */
+            margin-right: 10px;
+        }
+
+        .value-image-container {
+            flex-shrink: 0; /* No se encoge */
+            width: 100%; /* Ocupa todo el ancho en móviles */
+            max-width: 400px; /* Ancho máximo para la imagen */
+            text-align: center;
+        }
+
+        .value-image {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Sección de CTA */
+        .cta-section {
+            background-color: #333; /* Fondo oscuro para contraste */
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #222;
+            color: #bbb;
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Navbar de la landing page */
+        .landing-navbar {
+            background-color: #333; /* Color oscuro para la navbar de la landing */
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .landing-navbar .nav-brand h1 {
+            color: #FFCC00; /* Amarillo */
+            font-size: 1.8rem;
+        }
+
+        .landing-navbar .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .landing-navbar .nav-links a:hover {
+            color: #FF9900; /* Naranja */
+        }
+
+        /* Botón de login específico para la landing */
+        .btn-landing-login {
+            background: linear-gradient(135deg, #FF9900, #FFCC00); /* Naranja a Amarillo */
+            color: #333; /* Texto oscuro para contrastar */
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(255, 153, 0, 0.4);
+        }
+
+        .btn-landing-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 153, 0, 0.6);
+        }
+
+
+        /* Media Queries para responsividad */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+            .features-section h2, .value-content h2 {
+                font-size: 2rem;
+            }
+            .value-proposition-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            .value-content {
+                text-align: center;
+                max-width: none;
+            }
+            .value-content ul {
+                text-align: left; /* Mantener la lista alineada a la izquierda */
+                max-width: 400px;
+                margin: 0 auto 30px auto;
+            }
+            .value-image-container {
+                order: -1; /* Mueve la imagen arriba en móviles */
+                margin-bottom: 30px;
+            }
+
+            .landing-navbar .nav-links {
+                display: none; /* Oculta enlaces de navegación en móviles si no se usa un menú hamburguesa */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar de la Landing Page --><nav class="landing-navbar">
+        <div class="nav-brand">
+            <h1>DigitalFood <span style="color:#28a745;">POTS</span></h1>
+        </div>
+        <div class="nav-links">
+            <a href="#inicio">Inicio</a>
+            <a href="#caracteristicas">Características</a>
+            <a href="#valor">Valor</a>
+            <a href="{{ url_for('login') }}" class="btn btn-landing-login">Iniciar Sesión</a>
+        </div>
+    </nav>
+
+    <!-- Sección Hero / Introducción --><section id="inicio" class="hero-section">
+        <div class="hero-content">
+            <h1>Optimiza tu Restaurante con DigitalFood POTS</h1>
+            <p>La solución inteligente para una gestión eficiente, pedidos rápidos y clientes satisfechos. Transforma la experiencia en tu "Cocina Consciente".</p>
+            <div class="hero-actions">
+                <a href="#caracteristicas" class="btn btn-primary">Descubre Más</a>
+                <a href="{{ url_for('login', rol='mesero') }}" class="btn btn-landing-login">Acceso Mesero</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Características / ¿Por qué es importante? --><section id="caracteristicas" class="features-section">
+        <h2>¿Por qué DigitalFood POTS es la clave para tu éxito?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-hand-holding-usd"></i>
+                <h3>Incrementa la Eficiencia</h3>
+                <p>Reduce errores manuales, agiliza la toma de pedidos y la comunicación con cocina. Más agilidad = más mesas atendidas y menos esperas.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-concierge-bell"></i>
+                <h3>Mejora la Experiencia del Cliente</h3>
+                <p>Un servicio más rápido y preciso significa clientes más felices. Enfócate en la calidad de tus platos y el ambiente de tu "Cocina Consciente".</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Toma Decisiones Inteligentes</h3>
+                <p>Accede a reportes detallados sobre ventas, productos más populares y rendimiento del personal. Optimiza tu negocio con datos reales.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-sync-alt"></i>
+                <h3>Actualizaciones en Tiempo Real</h3>
+                <p>Gestiona tu inventario y el estado de los pedidos al instante. Cocina y meseros siempre sincronizados para un servicio impecable.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Propuesta de Valor (con imagen vertical) --><section id="valor" class="value-proposition-section">
+        <div class="value-image-container">
+            <!-- Aquí puedes reemplazar 'imagen_vertical.jpg' con la ruta de tu imagen --><!-- Idealmente, una foto del interior de tu restaurante, un plato estrella o tu equipo. --><img src="{{ url_for('static', filename='pots_cocina_consciente.jpg') }}" alt="Imagen vertical del restaurante POTS Cocina Consciente" class="value-image">
+        </div>
+        <div class="value-content">
+            <h2>Nuestra Propuesta de Valor Única</h2>
+            <p>En DigitalFood POTS, entendemos la pasión detrás de cada "Cocina Consciente". Nuestra aplicación no es solo una herramienta, es un socio que te ayuda a:</p>
+            <ul>
+                <li><i class="fas fa-check-circle"></i>  Reducir el desperdicio y optimizar el stock.</li>
+                <li><i class="fas fa-check-circle"></i>  Empoderar a tu equipo con herramientas intuitivas.</li>
+                <li><i class="fas fa-check-circle"></i>  Construir una reputación de servicio excepcional.</li>
+                <li><i class="fas fa-check-circle"></i>  Adaptarte y crecer en un mercado competitivo.</li>
+            </ul>
+            <p>Únete a la revolución digital y lleva tu restaurante al siguiente nivel.</p>
+            <a href="{{ url_for('login') }}" class="btn btn-primary">¡Empezar Ahora!</a>
+        </div>
+    </section>
+
+    <!-- Sección de Llamada a la Acción --><section class="cta-section">
+        <h2>¿Listo para transformar tu restaurante?</h2>
+        <p>DigitalFood POTS está esperando para ayudarte a brillar.</p>
+        <a href="{{ url_for('login') }}" class="btn btn-landing-login">Acceder a mi Restaurante</a>
+    </section>
+
+    <!-- Footer --><footer>
+        <div class="footer-content">
+            <p>&copy; 2024 DigitalFood POTS. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

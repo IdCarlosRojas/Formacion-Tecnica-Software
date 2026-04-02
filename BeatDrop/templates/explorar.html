@@ -1,0 +1,29 @@
+{% extends 'base_layout.html' %}
+{% block title %}Explorar Productores | BeatDrop{% endblock %}
+{% block main_class %}main-content{% endblock %}
+
+{% block content %}
+<section class="explorar-section">
+  <h2>Explorar Productores</h2>
+  <p class="section-desc">Descubre y conecta con otros productores en BeatDrop.</p>
+  
+  <div class="user-grid">
+    {% for prod in productores %}
+    <div class="user-card">
+      
+      <img 
+        src="{% if prod.foto_perfil_url and prod.foto_perfil_url != 'default_pfp.png' %}{{ url_for('static', filename='uploads/pfp/' + prod.foto_perfil_url) }}{% else %}https://via.placeholder.com/90/eee/ccc?text={% endif %}" 
+        alt="Foto de {{ prod.NombreUsuario }}" 
+        class="user-card-pic">
+        
+      <h4><a href="{{ url_for('perfil', username=prod.NombreUsuario) }}">{{ prod.Nombre }}</a></h4>
+      <p class="meta">@{{ prod.NombreUsuario }}</p>
+      
+      <a href="{{ url_for('perfil', username=prod.NombreUsuario) }}" class="btn secondary">Ver Perfil</a>
+    </div>
+    {% else %}
+    <p>No se encontraron otros productores.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

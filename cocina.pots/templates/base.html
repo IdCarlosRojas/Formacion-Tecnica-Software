@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DigitalFood - POTS{% endblock %}</title>
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>🍽️ DigitalFood - POTS</h1>
+            </div>
+            <div class="nav-links">
+                {% if session.user_id %}
+                    <span class="user-info">Hola, {{ session.nombre }} ({{ session.rol }})</span>
+                    <a href="{{ url_for('logout') }}" class="btn btn-outline">Cerrar Sesión</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Mensajes Flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Contenido principal -->
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 DigitalFood - Restaurante POTS. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

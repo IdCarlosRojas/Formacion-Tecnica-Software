@@ -1,0 +1,46 @@
+{% extends "admin_base_custom.html" %}
+
+{% block title %}{% if user %}Editar Usuario{% else %}Crear Usuario{% endif %}{% endblock %}
+
+{% block content %}
+    {% if user %}
+        <h1>Editar Usuario: {{ user.Nombre }}</h1>
+        <p>Modifica los detalles del usuario.</p>
+    {% else %}
+        <h1>Crear Nuevo Usuario</h1>
+        <p>Completa el formulario para añadir un nuevo usuario.</p>
+    {% endif %}
+
+    <div class="admin-form-container">
+        <form method="POST">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="nombre">Nombre Completo</label>
+                    <input type="text" id="nombre" name="nombre" value="{{ user.Nombre if user else '' }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="correo">Correo Electrónico</label>
+                    <input type="email" id="correo" name="correo" value="{{ user.Correo if user else '' }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" placeholder="{% if user %}Dejar en blanco para no cambiar{% else %}Requerido{% endif %}" {% if not user %}required{% endif %}>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tipo_usuario">Tipo de Usuario</label>
+                    <select id="tipo_usuario" name="tipo_usuario" required>
+                        <option value="regular" {% if user and user.TipoUsuario == 'regular' %}selected{% endif %}>Regular</option>
+                        <option value="instructor" {% if user and user.TipoUsuario == 'instructor' %}selected{% endif %}>Instructor</option>
+                        <option value="admin" {% if user and user.TipoUsuario == 'admin' %}selected{% endif %}>Admin</option>
+                    </select>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Guardar Cambios</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
